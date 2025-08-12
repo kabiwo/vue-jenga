@@ -11,6 +11,7 @@ import postCssPxToRem from "postcss-pxtorem"
 
 // https://vite.dev/config/
 export default defineConfig({
+  base: './',
   plugins: [
     vue(),
     AutoImport({

@@ -35,7 +35,7 @@ declare module 'vue-router/auto-routes' {
    */
   export interface _RouteFileInfoMap {
     'src/views/index.vue': {
-      routes: '/' | '//form/' | '//table/' | '//form' | '//table'
+      routes: '/' | '//table/' | '//form/' | '//form' | '//table'
       views: 'default'
     }
     'src/views/index/form/index.vue': {
