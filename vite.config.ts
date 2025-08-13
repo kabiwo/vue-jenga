@@ -46,5 +46,8 @@ export default defineConfig({
         })
       ]
     }
+  },
+  build: {
+    outDir: 'dist-doc', // 修改输出目录为 custom-dist
   }
 })

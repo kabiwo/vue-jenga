@@ -3,7 +3,12 @@
   "private": false,
   "version": "0.0.1",
   "description": "A series of tool for vue based on element-plus & pinia & axios.",
-  "keywords": ["vue", "element-plus", "axios", "pinia"],
+  "keywords": [
+    "vue",
+    "element-plus",
+    "axios",
+    "pinia"
+  ],
   "type": "module",
   "scripts": {
     "dev": "vite",
