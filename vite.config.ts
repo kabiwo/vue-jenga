@@ -8,6 +8,7 @@ import vueDevTools from "vite-plugin-vue-devtools"
 import VueRouter from "unplugin-vue-router/vite"
 import { VueRouterAutoImports } from "unplugin-vue-router"
 import postCssPxToRem from "postcss-pxtorem"
+import htmlPurge from 'vite-plugin-purgecss'
 
 // https://vite.dev/config/
 export default defineConfig({
@@ -25,7 +26,9 @@ export default defineConfig({
       resolvers: [ElementPlusResolver()],
     }),
     Components({
-      resolvers: [ElementPlusResolver(), VantResolver()],
+      resolvers: [ElementPlusResolver({
+        importStyle: true
+      }), VantResolver()],
     }),
     UnoCSS() as PluginOption,
     vueDevTools(),
@@ -35,6 +38,15 @@ export default defineConfig({
       extensions: [".vue"],
       importMode: "async",
     }),
+    htmlPurge({
+      // content: ['./src/**/*.html', './src/**/*.js', './src/**/*.vue'],
+      // css: ['./src/css/*.css'],
+      // safelist: {
+      //   standard: ['active', 'open', 'hidden'],
+      //   greedy: [/^animate-/],
+      //   variants: ['hover', 'focus', 'active']
+      // }
+    }) as PluginOption
   ],
   css: {
     postcss: {

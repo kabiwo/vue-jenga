@@ -8,12 +8,24 @@ export {}
 /* prettier-ignore */
 declare module 'vue' {
   export interface GlobalComponents {
+    App: typeof import('./node_modules/vue-jenga/node_modules/vue-jenga/src/App.vue')['default']
     ElAside: typeof import('element-plus/es')['ElAside']
     ElConfigProvider: typeof import('element-plus/es')['ElConfigProvider']
     ElContainer: typeof import('element-plus/es')['ElContainer']
     ElHeader: typeof import('element-plus/es')['ElHeader']
     ElMain: typeof import('element-plus/es')['ElMain']
+    ElMenu: typeof import('element-plus/es')['ElMenu']
+    Form: typeof import('./node_modules/vue-jenga/node_modules/vue-jenga/src/views/index/form/index.vue')['default']
+    Index: typeof import('./node_modules/vue-jenga/node_modules/vue-jenga/src/views/index/index.vue')['default']
+    Markdown: typeof import('./src/components/markdown/index.vue')['default']
     RouterLink: typeof import('vue-router')['RouterLink']
     RouterView: typeof import('vue-router')['RouterView']
+    Table: typeof import('./node_modules/vue-jenga/node_modules/vue-jenga/src/views/index/table/index.vue')['default']
+    TableItem: typeof import('./node_modules/vue-jenga/node_modules/vue-jenga/src/lib/table/TableItem.vue')['default']
+    Views: typeof import('./node_modules/vue-jenga/node_modules/vue-jenga/src/views/index.vue')['default']
+    VjForm: typeof import('./node_modules/vue-jenga/node_modules/vue-jenga/src/lib/form/VjForm.vue')['default']
+    VjMenu: typeof import('./node_modules/vue-jenga/node_modules/vue-jenga/src/lib/menu/VjMenu.vue')['default']
+    VjModal: typeof import('./node_modules/vue-jenga/node_modules/vue-jenga/src/lib/modal/VjModal.vue')['default']
+    VjTable: typeof import('./node_modules/vue-jenga/node_modules/vue-jenga/src/lib/table/VjTable.vue')['default']
   }
 }

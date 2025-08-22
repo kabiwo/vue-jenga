@@ -3,12 +3,14 @@ import { defineConfig } from 'vite'
 import vue from '@vitejs/plugin-vue'
 import dts from 'vite-plugin-dts'
 import UnoCSS from 'unocss/vite'
+import ElementPlus from 'unplugin-element-plus/vite'
 
 const components = {
   form: 'src/lib/form/index.ts',
   table: 'src/lib/table/index.ts',
   modal: 'src/lib/modal/index.ts',
-  utils: 'src/lib/utils/index.ts'
+  utils: 'src/lib/utils/index.ts',
+  menu: 'src/lib/menu/index.ts'
 }
 
 export default defineConfig({
@@ -16,6 +18,7 @@ export default defineConfig({
     vue({
       // isProduction: true,
     }),
+    // ElementPlus({}),
     UnoCSS({
       mode: 'global', // 使用全局模式
       configFile: './uno.config.ts' // 明确指定配置文件
