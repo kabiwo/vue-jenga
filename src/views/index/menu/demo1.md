@@ -1,15 +1,13 @@
-<template>
-  <markdown :mdStr/>
-  <div class="vj-w-30%">
-    <VjMenu :menus :el-props="elProps"/>
-  </div>
-  <markdown :mdStr="demo1"/>
-</template>
-<script setup lang="ts">
-import mdStr from './index.md?raw'
-import demo1 from './demo1.md?raw'
+
+```html
+<div class="vj-w-30%">
+  <VjMenu :menus :el-props="elProps"/>
+</div>
+```
+
+```ts
 import { computed, ref } from 'vue';
-import { type VjMenuItem, type VjMenuProps } from 'vue-jenga/menu'
+import { VjMenu, type VjMenuItem, type VjMenuProps } from 'vue-jenga/menu'
 import { useRoute } from 'vue-router';
 
 const elProps = computed<VjMenuProps['elProps']>(() => ({
@@ -39,4 +37,4 @@ const menus = ref<VjMenuItem[]>([
     path: '/utils'
   }
 ]);
-</script>
+```

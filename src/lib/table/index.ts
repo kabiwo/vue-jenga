@@ -22,13 +22,14 @@ export type VjTableItemBase = {
 
   pIndex?: number;
   pSize?: number;
-  width?: string | number; // number->rem
-  minWidth?: string | number; // number->rem
+  width?: string | number; 
+  minWidth?: string | number; 
   formatter?: (
     scope: ElTableScope,
     value: unknown,
   ) => unknown;
   ellipsis?: boolean;
+  fixed?: 'left' | 'right' | boolean;
 };
 
 export type VjTableItemIndex = VjTableItemBase & {

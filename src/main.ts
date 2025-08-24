@@ -4,7 +4,7 @@ import { VjInit } from 'vue-jenga/utils'
 
 import { createApp } from 'vue'
 import './style.css'
-import 'vue-jenga/vue-jenga.css'
+// import 'vue-jenga/vue-jenga.css'
 import App from './App.vue'
 
 // import { createRouter, createWebHistory } from "vue-router/auto";

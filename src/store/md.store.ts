@@ -21,9 +21,12 @@ export const useMdStore = defineStore("mdStore", () => {
     )
   )
   md.use(anchor, {
-    permalink: true, // 启用链接
-    permalinkClass: 'direct-link', // 设置链接的 class
-    permalinkSymbol: '#', // 链接符号，默认是 § 符号
+    // permalink: true, // 启用链接
+    // permalinkClass: 'direct-link', // 设置链接的 class
+    // permalinkSymbol: '#', // 链接符号，默认是 § 符号
+    permalink: anchor.permalink.linkInsideHeader({
+      placement: 'before'
+    })
   });
 
   const render = async (mdStr: string) => {

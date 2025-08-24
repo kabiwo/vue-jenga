@@ -3,7 +3,6 @@ import { defineConfig } from 'vite'
 import vue from '@vitejs/plugin-vue'
 import dts from 'vite-plugin-dts'
 import UnoCSS from 'unocss/vite'
-import ElementPlus from 'unplugin-element-plus/vite'
 
 const components = {
   form: 'src/lib/form/index.ts',
@@ -18,10 +17,9 @@ export default defineConfig({
     vue({
       // isProduction: true,
     }),
-    // ElementPlus({}),
     UnoCSS({
       mode: 'global', // 使用全局模式
-      configFile: './uno.config.ts' // 明确指定配置文件
+      configFile: './uno.lib.config.ts' // 明确指定配置文件
     }),
     dts({
       tsconfigPath: 'tsconfig.lib.json',

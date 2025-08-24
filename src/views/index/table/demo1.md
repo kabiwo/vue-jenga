@@ -1,6 +1,4 @@
-<template>
-  <markdown :mdStr/>
-
+```html
   <div class="vj-h-50"> <!-- 有高度限制的外部容器 -->
     <vj-table :data="data" :total v-model:pIndex="pIndex" v-model:pSize="pSize" :cloumns v-bind="tableProps">
       <template #expendTemplate="scope">  <!-- 提供给expend用的插槽 -->
@@ -11,16 +9,11 @@
       </template>
     </vj-table>
   </div>
-
-  <markdown :mdStr="demo1" />
-</template>
-<script setup lang="ts">
+```
+```ts
 import { onMounted, ref } from 'vue';
-import mdStr from './index.md?raw'
-import demo1 from './demo1.md?raw'
 import {list} from 'radash'
-
-import { type ElTableScope, type VjTableConfigItem, type VjTableProps } from 'vue-jenga/table'
+import { type VjTableConfigItem, type VjTableProps } from 'vue-jenga/table'
 
 const data = ref<Record<string, unknown>[]>([]); // 列表数据
 const total = ref(0); // 总数
@@ -106,5 +99,4 @@ const getScope = (scope: ElTableScope) => {
 onMounted(() => {
   getData(); //初始化取值
 });
-
-</script>
+```

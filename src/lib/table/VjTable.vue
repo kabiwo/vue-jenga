@@ -26,7 +26,7 @@
   </div>
 </template>
 <script setup lang="ts">
-import { ElTable, ElPagination } from 'element-plus'
+import { ElTable, ElPagination, ElEmpty } from 'element-plus'
 import {
   ref,
   onMounted,

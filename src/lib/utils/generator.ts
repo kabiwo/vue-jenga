@@ -1,4 +1,5 @@
 import type { VjOptions } from "./type";
+import { camel } from 'radash'
 
 export const VjOptionsFromEnum = <K>(
   E: K,
@@ -24,3 +25,11 @@ export const VjOptionsFromEnum = <K>(
   }
   return arr;
 };
+
+export const _VjOnEmitsFromEmits = <T extends Record<string, unknown>>(source: T): T => {
+  let obj: Record<string, unknown> = {};
+  Object.keys(source).forEach(v => {
+    obj[camel('on-' + v)] = source[v];
+  });
+  return obj as T;
+}

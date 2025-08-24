@@ -6,6 +6,8 @@
 // biome-ignore lint: disable
 export {}
 declare global {
+  const VjMenu: typeof import('vue-jenga/menu')['VjMenu']
+  const VjTable: typeof import('vue-jenga/table')['VjTable']
   const onBeforeRouteLeave: typeof import('vue-router')['onBeforeRouteLeave']
   const onBeforeRouteUpdate: typeof import('vue-router')['onBeforeRouteUpdate']
   const useLink: typeof import('vue-router/auto')['useLink']

@@ -24,8 +24,8 @@ declare module 'vue' {
     TableItem: typeof import('./node_modules/vue-jenga/node_modules/vue-jenga/src/lib/table/TableItem.vue')['default']
     Views: typeof import('./node_modules/vue-jenga/node_modules/vue-jenga/src/views/index.vue')['default']
     VjForm: typeof import('./node_modules/vue-jenga/node_modules/vue-jenga/src/lib/form/VjForm.vue')['default']
-    VjMenu: typeof import('./node_modules/vue-jenga/node_modules/vue-jenga/src/lib/menu/VjMenu.vue')['default']
+    VjMenu: typeof import('vue-jenga/menu')['VjMenu']
     VjModal: typeof import('./node_modules/vue-jenga/node_modules/vue-jenga/src/lib/modal/VjModal.vue')['default']
-    VjTable: typeof import('./node_modules/vue-jenga/node_modules/vue-jenga/src/lib/table/VjTable.vue')['default']
+    VjTable: typeof import('vue-jenga/table')['VjTable']
   }
 }

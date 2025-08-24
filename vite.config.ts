@@ -10,6 +10,9 @@ import { VueRouterAutoImports } from "unplugin-vue-router"
 import postCssPxToRem from "postcss-pxtorem"
 import htmlPurge from 'vite-plugin-purgecss'
 
+// import { ElementPlusResolver } from './element-plus-resolver'
+import { VjResolver } from 'vue-jenga/utils'
+
 // https://vite.dev/config/
 export default defineConfig({
   base: './',
@@ -23,12 +26,22 @@ export default defineConfig({
           "vue-router/auto": ["useLink"],
         },
       ],
-      resolvers: [ElementPlusResolver()],
+      resolvers: [
+        VjResolver(),
+        ElementPlusResolver({
+          importStyle: 'css',
+          directives: true
+        })
+      ],
     }),
     Components({
-      resolvers: [ElementPlusResolver({
-        importStyle: true
-      }), VantResolver()],
+      resolvers: [
+        VjResolver(),
+        ElementPlusResolver({
+          importStyle: 'css',
+          directives: true
+        }), 
+        VantResolver()],
     }),
     UnoCSS() as PluginOption,
     vueDevTools(),

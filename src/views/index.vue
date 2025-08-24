@@ -7,7 +7,7 @@
     <el-container class="vj-overflow-auto">
       <el-aside width="200px">
         <VjMenu :menus :el-props="elProps"/>
-        <el-menu></el-menu>
+        <!-- <el-menu></el-menu> -->
       </el-aside>
       <el-main class="vj-overflow-auto">
         <RouterView/>
@@ -16,12 +16,14 @@
   </el-container>
 </template>
 <script setup lang="ts">
-import { ref } from 'vue';
-import { VjMenu, type VjMenuItem, type VjMenuProps } from 'vue-jenga/menu'
+import { computed, ref } from 'vue';
+import { type VjMenuItem, type VjMenuProps } from 'vue-jenga/menu'
+import { useRoute } from 'vue-router';
 
-const elProps = ref<VjMenuProps['elProps']>({
-  router: true
-});
+const elProps = computed<VjMenuProps['elProps']>(() => ({
+  router: true,
+  defaultActive: useRoute()?.path
+}));
 
 const menus = ref<VjMenuItem[]>([
   {

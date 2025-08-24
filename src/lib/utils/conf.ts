@@ -37,6 +37,10 @@ export const useVjConfStore = defineStore("vj-conf", () => {
     return number;
   });
 
+  const root10px = computed(() => {
+    return rootFont.value / 4;
+  });
+
   const rootFontStr = computed(() => {
     const { width } = useWindowSize();
     return `calc(${(rootFont.value * 100) / width.value}vw)`;
@@ -76,6 +80,7 @@ export const useVjConfStore = defineStore("vj-conf", () => {
     resetConf,
 
     rootFont,
+    root10px,
     scaleRate,
     getScaledNum,
 
