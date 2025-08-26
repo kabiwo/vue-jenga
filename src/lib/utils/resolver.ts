@@ -2,10 +2,34 @@ import { flat } from "radash";
 
 // copy & edit from element-plus-resolver
 
+
 const fromAndEffectInfo: Record<string, string[]> = {
   VjMenu: ['menu', 'scrollbar', 'menu', 'menu-item', 'menu-item-group', 'sub-menu'],
-  VjTable: ['table', 'table', 'pagination', 'empty', 'table-column']
+  VjTable: ['table', 'table', 'pagination', 'empty', 'table-column'],
+  VjConfirm: ['utils', 'message-box'],
 };
+
+const utilsCollect = [
+  'VjInit',
+  'VjConfBase',
+  'useVjConfStore',
+
+  'VjBlobToStr',
+  'VjBlobToUrl',
+  'VjDownFile',
+  
+  'VjOptionsFromEnum',
+
+  'VjGet',
+  'VjPost',
+  'VjPut',
+  'VjDel',
+  'VjRequestGetConf',
+  'VjRequestInit',
+  'VjRequestSetConf',
+
+  'VjResolver',
+]
 
 export interface ImportInfo {
   as?: string
@@ -100,11 +124,18 @@ function resolveComponent(name: string, options: VjResolverOptionsResolved): Com
   if (options.exclude && name.match(options.exclude))
     return
 
-  if (!name.match(/^Vj[A-Z]/))
+  if (!name.match(/^Vj[A-Z]/) && !name.match(/^useVj[A-Z]/))
     return
 
   let info = fromAndEffectInfo[name];
   if (!info) {
+    if (utilsCollect.includes(name)) {
+      return {
+        name,
+        from: 'vue-jenga/utils'
+      };
+    }
+    console.log(name);
     return;
   }
 

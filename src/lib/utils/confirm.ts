@@ -8,10 +8,12 @@ export const VjConfirm = async (
   callback: () => Promise<boolean>,
   options?: ElMessageBoxOptions,
 ): Promise<boolean> => {
-  const res = await ElMessageBox(Object.assign({
+  const [err1, res1] = await tryit(() => ElMessageBox(Object.assign({
     title,
     message,
     showCancelButton: true,
+    closeOnClickModal: false,
+    closeOnPressEscape: false,
     type: "warning",
     customStyle: { wordBreak: "break-all" },
     beforeClose: async (action, instance, done) => {
@@ -25,6 +27,6 @@ export const VjConfirm = async (
         done();
       }
     },
-  } as ElMessageBoxOptions, options || {}));
-  return res === "confirm";
+  } as ElMessageBoxOptions, options || {})))();
+  return res1 === "confirm";
 };

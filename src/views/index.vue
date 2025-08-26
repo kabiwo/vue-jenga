@@ -44,7 +44,41 @@ const menus = ref<VjMenuItem[]>([
   },
   {
     name: 'Utils',
-    path: '/utils'
+    path: '/utils',
+    children: [
+      {
+        name: 'Init',
+        path: '/utils/init'
+      },
+      {
+        name: 'Conf',
+        path: '/utils/conf'
+      },
+      {
+        name: 'Confirm',
+        path: '/utils/confirm'
+      },
+      {
+        name: 'File',
+        path: '/utils/file'
+      },
+      {
+        name: 'Generator',
+        path: '/utils/generator'
+      },
+      {
+        name: 'Request',
+        path: '/utils/request'
+      },
+      {
+        name: 'Resolver',
+        path: '/utils/resolver'
+      },
+      {
+        name: 'Type',
+        path: '/utils/type'
+      },
+    ]
   }
 ]);
 </script>

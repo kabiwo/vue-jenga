@@ -10,11 +10,16 @@ declare module 'vue' {
   export interface GlobalComponents {
     App: typeof import('./node_modules/vue-jenga/node_modules/vue-jenga/src/App.vue')['default']
     ElAside: typeof import('element-plus/es')['ElAside']
+    ElButton: typeof import('element-plus/es')['ElButton']
+    ElCol: typeof import('element-plus/es')['ElCol']
     ElConfigProvider: typeof import('element-plus/es')['ElConfigProvider']
     ElContainer: typeof import('element-plus/es')['ElContainer']
+    ElForm: typeof import('element-plus/es')['ElForm']
+    ElFormItem: typeof import('element-plus/es')['ElFormItem']
     ElHeader: typeof import('element-plus/es')['ElHeader']
     ElMain: typeof import('element-plus/es')['ElMain']
     ElMenu: typeof import('element-plus/es')['ElMenu']
+    ElRow: typeof import('element-plus/es')['ElRow']
     Form: typeof import('./node_modules/vue-jenga/node_modules/vue-jenga/src/views/index/form/index.vue')['default']
     Index: typeof import('./node_modules/vue-jenga/node_modules/vue-jenga/src/views/index/index.vue')['default']
     Markdown: typeof import('./src/components/markdown/index.vue')['default']
@@ -27,5 +32,8 @@ declare module 'vue' {
     VjMenu: typeof import('vue-jenga/menu')['VjMenu']
     VjModal: typeof import('./node_modules/vue-jenga/node_modules/vue-jenga/src/lib/modal/VjModal.vue')['default']
     VjTable: typeof import('vue-jenga/table')['VjTable']
+  }
+  export interface GlobalDirectives {
+    vLoading: typeof import('element-plus/es')['ElLoadingDirective']
   }
 }

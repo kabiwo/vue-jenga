@@ -6,11 +6,28 @@
 // biome-ignore lint: disable
 export {}
 declare global {
+  const ElMessage: typeof import('element-plus/es')['ElMessage']
+  const VjBlobToStr: typeof import('vue-jenga/utils')['VjBlobToStr']
+  const VjBlobToUrl: typeof import('vue-jenga/utils')['VjBlobToUrl']
+  const VjConfBase: typeof import('vue-jenga/utils')['VjConfBase']
+  const VjConfirm: typeof import('vue-jenga/utils')['VjConfirm']
+  const VjDel: typeof import('vue-jenga/utils')['VjDel']
+  const VjDownFile: typeof import('vue-jenga/utils')['VjDownFile']
+  const VjGet: typeof import('vue-jenga/utils')['VjGet']
+  const VjInit: typeof import('vue-jenga/utils')['VjInit']
   const VjMenu: typeof import('vue-jenga/menu')['VjMenu']
+  const VjOptionsFromEnum: typeof import('vue-jenga/utils')['VjOptionsFromEnum']
+  const VjPost: typeof import('vue-jenga/utils')['VjPost']
+  const VjPut: typeof import('vue-jenga/utils')['VjPut']
+  const VjRequestGetConf: typeof import('vue-jenga/utils')['VjRequestGetConf']
+  const VjRequestInit: typeof import('vue-jenga/utils')['VjRequestInit']
+  const VjRequestSetConf: typeof import('vue-jenga/utils')['VjRequestSetConf']
+  const VjResolver: typeof import('vue-jenga/utils')['VjResolver']
   const VjTable: typeof import('vue-jenga/table')['VjTable']
   const onBeforeRouteLeave: typeof import('vue-router')['onBeforeRouteLeave']
   const onBeforeRouteUpdate: typeof import('vue-router')['onBeforeRouteUpdate']
   const useLink: typeof import('vue-router/auto')['useLink']
   const useRoute: typeof import('vue-router')['useRoute']
   const useRouter: typeof import('vue-router')['useRouter']
+  const useVjConfStore: typeof import('vue-jenga/utils')['useVjConfStore']
 }

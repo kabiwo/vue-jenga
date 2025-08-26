@@ -1,6 +1,6 @@
 import 'virtual:uno.css'
 
-import { VjInit } from 'vue-jenga/utils'
+// import { VjInit } from 'vue-jenga/utils'
 
 import { createApp } from 'vue'
 import './style.css'

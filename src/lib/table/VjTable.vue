@@ -34,11 +34,13 @@ import {
   useSlots,
   type Slot,
   defineComponent,
+  type Slots,
 } from "vue";
 import { type VjTableProps } from "./index";
 import TableItem from "./TableItem.vue";
 import { useVjConfStore } from '../utils';
 import { useResizeObserver } from '@vueuse/core';
+import { assign, mapKeys } from 'radash';
 
 const pIndex = defineModel<number>("pIndex", {
   default: 1,
@@ -69,13 +71,8 @@ const getComponent = (slot: Slot, scope: unknown) => {
 };
 
 const s = useSlots();
-const slots = computed<Record<string, Slot>>(() => {
-  let keys = Object.keys(s);
-  let obj: Record<string | number, Slot> = {};
-  keys.forEach((key) => {
-    obj[key] = s[key]!;
-  });
-  return Object.assign({}, obj, props.slots || {});
+const slots = computed<Slots>(() => {
+  return assign(mapKeys(s, key => key), props.slots || {});
 });
 
 onMounted(() => {
