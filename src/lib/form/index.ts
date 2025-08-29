@@ -4,7 +4,20 @@ import VjForm from './VjForm.vue';
 import type { Slots } from 'vue';
 import type { ElForm, FormItemRule, FormRules } from 'element-plus';
 import type { ElPropsType } from '../utils';
+import type { VjfInputProps } from './items/input';
+import type { VjfNumberProps } from './items/number';
+import type { VjfSelectProps } from './items/select';
+import type { VjfSubProps } from './items/sub';
+import type { VjfDateProps } from './items/date';
+import type { VjfRadioProps } from './items/radio';
+import type { VjfCheckboxProps } from './items/checkbox';
+import type { VjfSwitchProps } from './items/switch';
+import type { VjfUploadProps } from './items/upload';
+import type { VjfCascaderProps } from './items/cascader';
+import type { VjfTreeSelectProps } from './items/treeselect';
 export { VjForm };
+
+export * from './tool'
 
 export type ElFormInsType = InstanceType<typeof ElForm>;
 
@@ -21,6 +34,7 @@ export type VjFormItemAttach = {  // 父组件向子组件注入的附加参数
 };
 
 export type VjFormItemBase = { // 用户输入的基准参数
+  type?: string;
   disableCheck?: boolean | ((props: VjFormItemProps, model: Record<string, unknown>) => boolean); // 检查disabled状态
   defaultValue?: unknown | ((props: VjFormItemProps, model: Record<string, unknown>) => unknown); // 传入默认值
   label?: string | ((item: VjFormItemProps) => string); // 标签
@@ -43,26 +57,37 @@ export type VjFormItemBase = { // 用户输入的基准参数
   [x: string]: unknown;
 };
 
-export type ItemCustomProps = VjFormItemBase & {
-  type: "custom";
-  skDefault?: string;
-  formatter?: (value: unknown, item: VjFormItemProps, model: Record<string, unknown>) => unknown;
-  className?: string
-};
-
-export type ItemEmptyProps = VjFormItemBase & {
+export type VjfEmptyProps = VjFormItemBase & { // 空格
   type: "empty";
 };
 
-export type ItemForProps = VjFormItemBase & {
-  type: "for";
-  forItems?: VjFormItemProps[] | ((props: ItemForProps, model: Record<string, unknown>) => VjFormItemProps[]);
+export type VjfRepeatProps = VjFormItemBase & { // 循环生成
+  type: "repeat";
+  repeatItems?: VjFormItemProps[] | ((props: VjfRepeatProps, model: Record<string, unknown>) => VjFormItemProps[]);
 };
 
-export type VjFormItemProps =
-  | ItemCustomProps
-  | ItemEmptyProps
-  | ItemForProps
+export type VjfCustomProps = VjFormItemBase & { // 自定义
+  type: "custom";
+  skDefault?: string;
+  formatter?: (value: unknown, item: VjFormItemProps, model: Record<string, unknown>) => string;
+  className?: string
+};
+
+export type VjFormItemProps = VjFormItemBase
+  | VjfEmptyProps
+  | VjfRepeatProps
+  | VjfCustomProps
+  | VjfInputProps
+  | VjfNumberProps
+  | VjfSelectProps
+  | VjfSubProps
+  | VjfDateProps
+  | VjfRadioProps
+  | VjfCheckboxProps
+  | VjfSwitchProps
+  | VjfUploadProps
+  | VjfCascaderProps
+  | VjfTreeSelectProps
 
 export type VjFormItemPropsTotal = VjFormItemProps & VjFormItemAttach;
 
@@ -76,6 +101,7 @@ export type VjFormProps = {
   elFormProps?: ElPropsType<typeof ElForm>;
   slots?: Slots;
   loading?: boolean;
+  remerge?: (item: VjFormItemProps, index: number) => Partial<VjFormItemProps>;
 };
 
 export type VjFormPropsTotal = VjFormProps & VjFormPropsAttach;

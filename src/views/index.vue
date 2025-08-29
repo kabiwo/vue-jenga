@@ -7,7 +7,6 @@
     <el-container class="vj-overflow-auto">
       <el-aside width="200px">
         <VjMenu :menus :el-props="elProps"/>
-        <!-- <el-menu></el-menu> -->
       </el-aside>
       <el-main class="vj-overflow-auto">
         <RouterView/>
@@ -37,6 +36,20 @@ const menus = ref<VjMenuItem[]>([
   {
     name: 'Menu',
     path: '/menu'
+  },
+  {
+    name: 'modal',
+    path: '/modal',
+    children: [
+      {
+        name: 'Modal',
+        path: '/modal/'
+      },
+      {
+        name: 'ModalForm',
+        path: '/modal/form'
+      }
+    ]
   },
   {
     name: 'Table',

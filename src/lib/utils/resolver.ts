@@ -7,7 +7,16 @@ const fromAndEffectInfo: Record<string, string[]> = {
   VjMenu: ['menu', 'scrollbar', 'menu', 'menu-item', 'menu-item-group', 'sub-menu'],
   VjTable: ['table', 'table', 'pagination', 'empty', 'table-column'],
   VjConfirm: ['utils', 'message-box'],
+  VjForm: ['form', 'form', 'form-item', 'row', 'col', 'input', 'input-number', 'loading', 'select', 'select-v2', 'option', 'date-picker', 'time-picker', 'radio-group', 'radio', 'radio-button', 'checkbox-group', 'checkbox', 'checkbox-button', 'switch', 'upload', 'dialog', 'button', 'cascader', 'cascader-panel', 'tree-select'],
+  VjModal: ['modal', 'dialog', 'button']
 };
+
+const formCollect = [
+  'VjfcTextarea',
+  'VjfcDateRange',
+  'VjfcDatetime',
+  'VjfcDatetimeRange',
+];
 
 const utilsCollect = [
   'VjInit',
@@ -17,8 +26,10 @@ const utilsCollect = [
   'VjBlobToStr',
   'VjBlobToUrl',
   'VjDownFile',
-  
+
   'VjOptionsFromEnum',
+  '_VjOnEmitsFromEmits',
+  'VjObjDeepMerge',
 
   'VjGet',
   'VjPost',
@@ -29,6 +40,8 @@ const utilsCollect = [
   'VjRequestSetConf',
 
   'VjResolver',
+
+  'VjSlotRender'
 ]
 
 export interface ImportInfo {
@@ -135,6 +148,12 @@ function resolveComponent(name: string, options: VjResolverOptionsResolved): Com
         from: 'vue-jenga/utils'
       };
     }
+    if (formCollect.includes(name)) {
+      return {
+        name,
+        from: 'vue-jenga/form'
+      };
+    }
     console.log(name);
     return;
   }
@@ -150,7 +169,7 @@ function resolveDirective(name: string, options: VjResolverOptionsResolved): Com
   if (!options.directives)
     return
 
-  const directives: Record<string, {from: string, effects: string[]}> = {
+  const directives: Record<string, { from: string, effects: string[] }> = {
   }
 
   const directive = directives[name]

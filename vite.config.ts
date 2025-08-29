@@ -29,7 +29,7 @@ export default defineConfig({
       resolvers: [
         VjResolver(),
         ElementPlusResolver({
-          importStyle: 'css',
+          // importStyle: 'css',
           directives: true
         })
       ],
@@ -38,7 +38,7 @@ export default defineConfig({
       resolvers: [
         VjResolver(),
         ElementPlusResolver({
-          importStyle: 'css',
+          // importStyle: 'css',
           directives: true
         }), 
         VantResolver()],

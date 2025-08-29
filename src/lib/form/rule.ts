@@ -21,22 +21,22 @@ export const ruleTypeCheckMsg = {
 
 export const ruleNumCheckMsg = {
   string: {
-    "range": "必须在{{0}}到{{1}}个字符之间",
-    "len": "只能是{{0}}个字符",
-    "min": "必须有至少{{0}}个字符",
-    "max": "最多只能有{{0}}个字符"
+    "range": "必须在{{1}}到{{2}}个字符之间",
+    "len": "只能是{{1}}个字符",
+    "min": "必须有至少{{1}}个字符",
+    "max": "最多只能有{{1}}个字符"
   },
   number: {
-    "len": "必须等于{{0}}",
-    "min": "不得小于{{0}}",
-    "max": "不得大于{{0}}",
-    "range": "必须在{{0}}到{{1}}之间"
+    "len": "必须等于{{1}}",
+    "min": "不得小于{{1}}",
+    "max": "不得大于{{1}}",
+    "range": "必须在{{1}}到{{2}}之间"
   },
   array: {
-    "len": "必须有{{0}}个元素",
-    "min": "不得少于{{0}}个元素",
-    "max": "不得多于{{0}}个元素",
-    "range": "必须在{{0}}到{{1}}个元素之间"
+    "len": "必须有{{1}}个元素",
+    "min": "不得少于{{1}}个元素",
+    "max": "不得多于{{1}}个元素",
+    "range": "必须在{{1}}到{{2}}个元素之间"
   },
 };
 
@@ -79,7 +79,7 @@ const splitRules = (item: FormItemRule, code: string, labelMap: ComputedRef<Reco
   let arr: FormItemRule[] = [];
   const addRule = (key: string, getMsg?: () => string, patch?: { obj?: object; arr?: unknown[] }) => {
     let obj: FormItemRule = {
-      message: () => {
+      message: (c?: string) => {
         let param: unknown[] = [labelMap.value[code]];
         if (patch && patch.arr) {
           param = [labelMap.value[code], ...patch.arr];
@@ -92,7 +92,7 @@ const splitRules = (item: FormItemRule, code: string, labelMap: ComputedRef<Reco
     if (patch && patch.obj) {
       assign(obj, patch.obj);
     } else {
-      obj[key as keyof FormItemRule] = (item as any)[key];
+      obj[key as keyof FormItemRule] = (item as FormItemRule)[key as keyof FormItemRule] as never;
     }
     if (["range", "min", "max", "len"].includes(key)) {
       obj.validator = (rule, value) => {

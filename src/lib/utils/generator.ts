@@ -1,5 +1,5 @@
 import type { VjOptions } from "./type";
-import { camel } from 'radash'
+import { camel, isObject } from 'radash'
 
 export const VjOptionsFromEnum = <K>(
   E: K,
@@ -32,4 +32,18 @@ export const _VjOnEmitsFromEmits = <T extends Record<string, unknown>>(source: T
     obj[camel('on-' + v)] = source[v];
   });
   return obj as T;
+};
+
+export const VjObjDeepMerge = (...args: Record<string, unknown>[]): Record<string, unknown> => {
+  let res: Record<string, unknown> = {};
+  args.forEach(obj => {
+    Object.keys(obj).forEach(key => {
+      if (res.hasOwnProperty(key) && isObject(res[key]) && isObject(obj[key])) {
+        res[key] = VjObjDeepMerge(res[key] as Record<string, unknown>, obj[key] as Record<string, unknown>);
+      } else {
+        res[key] = obj[key];
+      }
+    })
+  });
+  return res;
 }

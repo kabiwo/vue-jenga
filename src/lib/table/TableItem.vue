@@ -2,7 +2,7 @@
   <template v-if="(props as VjTableItemParent).children">
     <el-table-column :label :width="width" :min-width="minWidth" :fixed="props.fixed" v-bind="props.elProps">
       <template v-if="props.skDefault && slots[props.skDefault]" #default="scope">
-        <component :is="getComponent(slots[props.skDefault]!, scope)" />
+        <component :is="VjSlotRender(slots[props.skDefault]!, scope)" />
       </template>
       <template v-else #default>
         <TableItem v-for="(item, index) of (props as VjTableItemParent).children" :key="index" v-bind="item"
@@ -10,7 +10,7 @@
         </TableItem>
       </template>
       <template v-if="props.skHeader && slots[props.skHeader]" #header="scope">
-        <component :is="getComponent(slots[props.skHeader]!, scope)" />
+        <component :is="VjSlotRender(slots[props.skHeader]!, scope)" />
       </template>
     </el-table-column>
   </template>
@@ -24,7 +24,7 @@
         :fixed="props.fixed" v-bind="props.elProps">
         <template #default="scope">
           <template v-if="props.skDefault && slots[props.skDefault]">
-            <component :is="getComponent(slots[props.skDefault]!, scope)" />
+            <component :is="VjSlotRender(slots[props.skDefault]!, scope)" />
           </template>
         </template>
       </el-table-column>
@@ -34,7 +34,7 @@
         :fixed="props.fixed" v-bind="props.elProps">
         <template #default="scope">
           <template v-if="props.skDefault && slots[props.skDefault]">
-            <component :is="getComponent(slots[props.skDefault]!, scope)" />
+            <component :is="VjSlotRender(slots[props.skDefault]!, scope)" />
           </template>
         </template>
       </el-table-column>
@@ -60,7 +60,7 @@
           </template>
           <template v-else>
             <template v-if="props.skDefault && slots[props.skDefault]">
-              <component :is="getComponent(slots[props.skDefault]!, scope)" />
+              <component :is="VjSlotRender(slots[props.skDefault]!, scope)" />
             </template>
           </template>
         </template>
@@ -71,7 +71,7 @@
         </template>
         <template #header="scope">
           <template v-if="props.skHeader && slots[props.skHeader]">
-            <component :is="getComponent(slots[props.skHeader]!, scope)" />
+            <component :is="VjSlotRender(slots[props.skHeader]!, scope)" />
           </template>
         </template>
       </el-table-column>
@@ -79,7 +79,7 @@
   </template>
 </template>
 <script setup lang="ts">
-import { computed, defineComponent, type Slot } from "vue";
+import { computed } from "vue";
 import { ElTableColumn } from 'element-plus';
 import {
   type VjTableItemParent,
@@ -91,7 +91,7 @@ import {
   type VjTableItemSelect,
   type ElTableScope,
 } from "./";
-import { useVjConfStore } from "../utils";
+import { VjSlotRender, useVjConfStore } from "../utils";
 
 const props = defineProps<VjTableConfigItem>();
 
@@ -104,10 +104,6 @@ const label = computed(() => {
 const slots = computed(() => {
   return props.slots || {};
 });
-
-const getComponent = (slot: Slot, scope: unknown) => {
-  return defineComponent(() => () => slot(scope));
-};
 
 const getIndex = (row: number): number => {
   return (props.pIndex! - 1) * props.pSize! + row + 1;

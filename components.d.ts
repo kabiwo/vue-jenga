@@ -17,6 +17,7 @@ declare module 'vue' {
     ElForm: typeof import('element-plus/es')['ElForm']
     ElFormItem: typeof import('element-plus/es')['ElFormItem']
     ElHeader: typeof import('element-plus/es')['ElHeader']
+    ElInput: typeof import('element-plus/es')['ElInput']
     ElMain: typeof import('element-plus/es')['ElMain']
     ElMenu: typeof import('element-plus/es')['ElMenu']
     ElRow: typeof import('element-plus/es')['ElRow']
@@ -30,7 +31,7 @@ declare module 'vue' {
     Views: typeof import('./node_modules/vue-jenga/node_modules/vue-jenga/src/views/index.vue')['default']
     VjForm: typeof import('./node_modules/vue-jenga/node_modules/vue-jenga/src/lib/form/VjForm.vue')['default']
     VjMenu: typeof import('vue-jenga/menu')['VjMenu']
-    VjModal: typeof import('./node_modules/vue-jenga/node_modules/vue-jenga/src/lib/modal/VjModal.vue')['default']
+    VjModal: typeof import('vue-jenga/modal')['VjModal']
     VjTable: typeof import('vue-jenga/table')['VjTable']
   }
   export interface GlobalDirectives {

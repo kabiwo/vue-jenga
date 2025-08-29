@@ -13,3 +13,5 @@ export * from './confirm'
 export * from './file'
 
 export * from './request'
+
+export * from './vue'

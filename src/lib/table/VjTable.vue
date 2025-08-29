@@ -6,10 +6,10 @@
       <TableItem v-for="(item, index) in props.cloumns" :key="index" :pIndex :pSize v-bind="item" :slots>
       </TableItem>
       <template v-if="props.skAppend && slots[props.skAppend]" #append="scope">
-        <component :is="getComponent(slots[props.skAppend]!, scope)" />
+        <component :is="VjSlotRender(slots[props.skAppend]!, scope)" />
       </template>
       <template v-if="props.skEmpty && slots[props.skEmpty]" #empty="scope">
-        <component :is="getComponent(slots[props.skEmpty]!, scope)" />
+        <component :is="VjSlotRender(slots[props.skEmpty]!, scope)" />
       </template>
       <template v-else #empty>
         <el-empty />
@@ -19,7 +19,7 @@
       <el-pagination v-model:current-page="pIndex" v-model:page-size="pSize" hide-on-single-page :total="props.total"
         layout="->, total, sizes, prev, pager, next, jumper" v-bind="props.elPagiProps" v-on="props.elPagiEmit || {}">
         <template v-if="props.skPagiDefault && slots[props.skPagiDefault]" #default="scope">
-          <component :is="getComponent(slots[props.skPagiDefault]!, scope)" />
+          <component :is="VjSlotRender(slots[props.skPagiDefault]!, scope)" />
         </template>
       </el-pagination>
     </div>
@@ -32,13 +32,11 @@ import {
   onMounted,
   computed,
   useSlots,
-  type Slot,
-  defineComponent,
   type Slots,
 } from "vue";
 import { type VjTableProps } from "./index";
 import TableItem from "./TableItem.vue";
-import { useVjConfStore } from '../utils';
+import { VjSlotRender, useVjConfStore } from '../utils';
 import { useResizeObserver } from '@vueuse/core';
 import { assign, mapKeys } from 'radash';
 
@@ -65,10 +63,6 @@ defineExpose({
 });
 
 const maxHeight = ref<number>();
-
-const getComponent = (slot: Slot, scope: unknown) => {
-  return defineComponent(() => () => slot(scope));
-};
 
 const s = useSlots();
 const slots = computed<Slots>(() => {

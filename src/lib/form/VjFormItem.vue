@@ -1,24 +1,84 @@
 <template>
-  <el-form-item ref="formItemRef" :label :prop="props.code" class="px-1 m-0!">
+  <el-form-item ref="formItemRef" :label :prop="props.code" class="vj-px-1 vj-m-0!">
     <template #default="scope">
-      <el-row class="w-full">
+      <el-row class="vj-w-full">
         <el-col v-if="props.spanPre" :span="props.spanPre">
-          <component v-if="props.skPre && slots[props.skPre]" :is="getComponent(slots[props.skPre]!, Object.assign({}, scope, { _FormModel: props.model }))" />
+          <component v-if="props.skPre && slots[props.skPre]"
+            :is="VjSlotRender(slots[props.skPre]!, Object.assign({}, scope, { _FormModel: props.model }))" />
         </el-col>
         <el-col :span="spanItem">
-
+          <template v-if="props.type === 'custom'">
+            <component v-if="props.skDefault && slots[props.skDefault as string]"
+              :is="VjSlotRender(slots[props.skDefault as string]!, Object.assign({}, scope, { _FormModel: props.model, _ItemProps: props, _code: props.code }))" />
+            <div v-else :title="customText" :class="props.className">{{ customText }}</div>
+          </template>
+          <template v-else-if="props.type === 'number'">
+            <VjfNumber v-model="model" :slots v-bind="mergedProps" @clearValidate="clearValidate" />
+          </template>
+          <template v-else-if="props.type === 'select'">
+            <VjfSelect v-model="model" :slots v-bind="mergedProps" />
+          </template>
+          <template v-else-if="props.type === 'sub'">
+            <VjfSub v-model="model" :slots v-bind="mergedProps" />
+          </template>
+          <template v-else-if="props.type === 'date'">
+            <VjfDate v-model="model" :slots v-bind="mergedProps"/>
+          </template>
+          <template v-else-if="props.type === 'time'">
+            <VjfTime v-model="model" :slots v-bind="mergedProps"/>
+          </template>
+          <template v-else-if="props.type === 'radio'">
+            <VjfRadio v-model="model" :slots v-bind="mergedProps"/>
+          </template>
+          <template v-else-if="props.type === 'checkbox'">
+            <VjfCheckbox v-model="model" :slots v-bind="mergedProps"/>
+          </template>
+          <template v-else-if="props.type === 'switch'">
+            <VjfSwitch v-model="model" :slots v-bind="mergedProps"/>
+          </template>
+          <template v-else-if="props.type === 'upload'">
+            <VjfUpload v-model="model" :slots v-bind="mergedProps"/> 
+          </template>
+          <template v-else-if="props.type === 'cascader'">
+            <VjfCascader v-model="model" :slots v-bind="mergedProps"/>
+          </template>
+          <template v-else-if="props.type === 'treeselect'">
+            <VjfTreeselect v-model="model" :slots v-bind="mergedProps"/>
+          </template>
+          <template v-else>
+            <VjfInput v-model="model" :slots v-bind="mergedProps" />
+          </template>
         </el-col>
         <el-col v-if="props.spanPost" :span="props.spanPost">
-          <component v-if="props.skPost && slots[props.skPost]" :is="getComponent(slots[props.skPost]!, Object.assign({}, scope, { _FormModel: props.model }))" />
+          <component v-if="props.skPost && slots[props.skPost]"
+            :is="VjSlotRender(slots[props.skPost]!, Object.assign({}, scope, { _FormModel: props.model }))" />
         </el-col>
       </el-row>
     </template>
   </el-form-item>
 </template>
 <script setup lang="ts">
-import { computed, defineComponent, nextTick, onMounted, ref, watch, type Slot, } from "vue";
-import type { ItemCustomProps, VjFormItemPropsTotal } from ".";
+import { computed, nextTick, onMounted, ref, watch } from "vue";
+import { ElFormItem, ElRow, ElCol } from 'element-plus';
+import type { VjfCustomProps, VjFormItemPropsTotal } from ".";
 import { clone, template } from "radash";
+import { VjSlotRender } from "../utils";
+import VjfInput from "./items/input/VjfInput.vue";
+import VjfNumber from "./items/number/VjfNumber.vue";
+import VjfSelect from "./items/select/VjfSelect.vue";
+import VjfSub from "./items/sub/VjfSub.vue";
+import VjfDate from "./items/date/VjfDate.vue";
+import VjfTime from "./items/time/VjfTime.vue";
+import VjfRadio from "./items/radio/VjfRadio.vue";
+import VjfCheckbox from "./items/checkbox/VjfCheckbox.vue";
+import VjfSwitch from "./items/switch/VjfSwitch.vue";
+import VjfUpload from "./items/upload/VjfUpload.vue";
+import VjfCascader from "./items/cascader/VjfCascader.vue";
+import VjfTreeselect from "./items/treeselect/VjfTreeselect.vue";
+
+const getProps = (p: unknown) => {
+  console.log('item', p);
+}
 
 const model = defineModel<unknown>();
 const props = defineProps<VjFormItemPropsTotal>();
@@ -72,10 +132,6 @@ const mergedProps = computed(() => {
   return obj;
 });
 
-const getComponent = (slot: Slot, scope: unknown) => {
-  return defineComponent(() => () => slot(scope));
-};
-
 const spanItem = computed(() => {
   return 24 - (props.spanPre || 0) - (props.spanPost || 0);
 });
@@ -86,8 +142,8 @@ const clearValidate = () => {
   formItemRef.value?.clearValidate();
 };
 
-const computedCustomText = computed(() => {
-  let text = ((props as ItemCustomProps).formatter ? (props as ItemCustomProps).formatter!(model.value, mergedProps.value, mergedProps.value.model!) : model.value || "-") as string;
-  return text;
+const customText = computed(() => {
+  let text = props.formatter ? (props as VjfCustomProps).formatter!(model.value, mergedProps.value, mergedProps.value.model!) : model.value || "-";
+  return text as string;
 });
 </script>

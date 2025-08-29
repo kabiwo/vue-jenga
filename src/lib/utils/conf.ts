@@ -1,4 +1,5 @@
 import { useWindowSize } from "@vueuse/core";
+import type { UploadRequestOptions } from "element-plus";
 import { defineStore } from "pinia";
 import { computed, ref, watch } from "vue";
 
@@ -6,6 +7,8 @@ export type VjConf = {
   remEnable: boolean;
   baseWidowWidth: number;
   baseFont: number;
+
+  uploadFunc?: (options: UploadRequestOptions) => Promise<boolean>;
 };
 
 export const VjConfBase: VjConf = {

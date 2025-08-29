@@ -50,7 +50,7 @@
     "@shikijs/twoslash": "^3.9.2",
     "@vueuse/core": "^13.6.0",
     "axios": "^1.11.0",
-    "element-plus": "^2.10.5",
+    "element-plus": "^2.11.1",
     "markdown-it-anchor": "^9.2.0",
     "markdown-it-async": "^2.2.0",
     "pinia": "^3.0.3",
