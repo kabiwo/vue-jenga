@@ -47,7 +47,7 @@ declare module 'vue-router/auto-routes' {
    */
   export interface _RouteFileInfoMap {
     'src/views/index.vue': {
-      routes: '/' | '//' | '//form/' | '//menu/' | '//modal/' | '//modal/form/' | '//table/' | '//utils/conf/' | '//utils/confirm/' | '//utils/file/' | '//utils/generator/' | '//utils/init/' | '//utils/request/' | '//utils/resolver/' | '//utils/type/' | '//utils/conf' | '//utils/confirm' | '//utils/file' | '//form' | '//modal/form' | '//utils/generator' | '//utils/init' | '//menu' | '//modal' | '//utils/request' | '//utils/resolver' | '//table' | '//utils/type' | '//utils'
+      routes: '/' | '//' | '//form/' | '//menu/' | '//modal/' | '//modal/form/' | '//table/' | '//utils/conf/' | '//utils/confirm/' | '//utils/generator/' | '//utils/file/' | '//utils/resolver/' | '//utils/request/' | '//utils/init/' | '//utils/type/' | '//utils/conf' | '//utils/confirm' | '//utils/file' | '//form' | '//modal/form' | '//utils/generator' | '//utils/init' | '//menu' | '//modal' | '//utils/request' | '//utils/resolver' | '//table' | '//utils/type' | '//utils'
       views: 'default'
     }
     'src/views/index/index.vue': {

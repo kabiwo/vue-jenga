@@ -2,13 +2,15 @@ import { flat } from "radash";
 
 // copy & edit from element-plus-resolver
 
+const formClassCollect = [ 'form', 'form-item', 'row', 'col', 'input', 'input-number', 'loading', 'select', 'select-v2', 'option', 'date-picker', 'time-picker', 'radio-group', 'radio', 'radio-button', 'checkbox-group', 'checkbox', 'checkbox-button', 'switch', 'upload', 'dialog', 'button', 'cascader', 'cascader-panel', 'tree-select']
 
 const fromAndEffectInfo: Record<string, string[]> = {
   VjMenu: ['menu', 'scrollbar', 'menu', 'menu-item', 'menu-item-group', 'sub-menu'],
   VjTable: ['table', 'table', 'pagination', 'empty', 'table-column'],
   VjConfirm: ['utils', 'message-box'],
-  VjForm: ['form', 'form', 'form-item', 'row', 'col', 'input', 'input-number', 'loading', 'select', 'select-v2', 'option', 'date-picker', 'time-picker', 'radio-group', 'radio', 'radio-button', 'checkbox-group', 'checkbox', 'checkbox-button', 'switch', 'upload', 'dialog', 'button', 'cascader', 'cascader-panel', 'tree-select'],
-  VjModal: ['modal', 'dialog', 'button']
+  VjForm: ['form', ...formClassCollect],
+  VjModal: ['modal', 'dialog', 'button'],
+  VjModalForm: ['modal', ...formClassCollect]
 };
 
 const formCollect = [

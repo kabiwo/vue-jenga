@@ -14,7 +14,7 @@ import { VjForm, type VjFormItemProps, type VjFormProps } from 'vue-jenga/form'
 import { type VjOptions } from 'vue-jenga/utils'
 import { list } from 'radash';
 import mdStr from './index.md?raw'
-import { VjfcDateRange, VjfcDatetime, VjfcDatetimeRange, VjfcTextarea } from '../../../lib/form';
+import { VjfcDateRange, VjfcDatetime, VjfcDatetimeRange, VjfcTextarea } from 'vue-jenga/form';
 // import axios from 'axios';
 
 

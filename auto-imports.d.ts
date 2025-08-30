@@ -18,6 +18,7 @@ declare global {
   const VjInit: typeof import('vue-jenga/utils')['VjInit']
   const VjMenu: typeof import('vue-jenga/menu')['VjMenu']
   const VjModal: typeof import('vue-jenga/modal')['VjModal']
+  const VjModalForm: typeof import('vue-jenga/modal')['VjModalForm']
   const VjObjDeepMerge: typeof import('vue-jenga/utils')['VjObjDeepMerge']
   const VjOptionsFromEnum: typeof import('vue-jenga/utils')['VjOptionsFromEnum']
   const VjPost: typeof import('vue-jenga/utils')['VjPost']
