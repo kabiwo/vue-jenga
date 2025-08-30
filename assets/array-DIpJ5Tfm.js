@@ -1,0 +1,1 @@
+const l=n=>!!(n&&n.constructor&&n.call&&n.apply);function*y(n,t,o=i=>i,c=1){const i=l(o)?o:()=>o,f=t?n:0,s=t??n;for(let r=f;r<=s&&(yield i(r),!(r+c>s));r+=c);}const m=(n,t,o,c)=>Array.from(y(n,t,o,c));export{m as l};
