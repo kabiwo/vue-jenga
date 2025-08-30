@@ -1,7 +1,7 @@
 {
   "name": "vue-jenga",
   "private": false,
-  "version": "0.0.1",
+  "version": "0.1.0",
   "description": "A series of tool for vue based on element-plus & pinia & axios.",
   "keywords": [
     "vue",
