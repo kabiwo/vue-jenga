@@ -1,4 +1,4 @@
-import{D as r}from"./menu-BnoDlUvg.js";import{d as s,c as p,h as a,b as l,k as n,l as i,e as t,F as M,o as c,p as f}from"./index-DHKqtlqR.js";import"./el-popper-DrlN1gvz.js";import"./el-tooltip-l0sNRNKZ.js";import{_ as d}from"./index.vue_vue_type_script_setup_true_lang-DiUW72pF.js";import"./generator-Bb6p3Rz3-CUyIr2YU.js";import"./string-CEni-xdW-CiDUdnNU.js";const j=`# 组件介绍
+import{D as r}from"./menu-C9NQopjC.js";import{d as s,c as p,h as a,b as l,k as n,l as i,e as t,F as M,o as c,p as f}from"./index-BlcAyLQn.js";import"./el-popper-9hxV20G-.js";import"./el-tooltip-l0sNRNKZ.js";import{_ as d}from"./index.vue_vue_type_script_setup_true_lang-sL8bRyZN.js";import"./generator-Bb6p3Rz3-BqGFjBd7.js";import"./string-CEni-xdW-Bo8Pq8v_.js";const j=`# 组件介绍
 
 菜单组件VjMenu，是对ElMenu的二次封装，可以根据特定类型的对象数组渲染出菜单  
 

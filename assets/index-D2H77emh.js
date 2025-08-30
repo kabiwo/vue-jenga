@@ -1,4 +1,4 @@
-import{_ as e}from"./index.vue_vue_type_script_setup_true_lang-DiUW72pF.js";import{d as t,i as o,e as s,o as r}from"./index-DHKqtlqR.js";const i=`# vue-jenga是什么
+import{_ as e}from"./index.vue_vue_type_script_setup_true_lang-sL8bRyZN.js";import{d as t,i as o,e as s,o as r}from"./index-BlcAyLQn.js";const i=`# vue-jenga是什么
 
 是我作为前端老油条，经历过数个框架之后，秉承配置化的复用思想，经过反复重构迭代所形成的一系列工具/组件集合  
 

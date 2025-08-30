@@ -1,4 +1,4 @@
-import{_ as e}from"./index.vue_vue_type_script_setup_true_lang-DiUW72pF.js";import{d as o,i as t,e as s,o as r}from"./index-DHKqtlqR.js";const m=`# 组件介绍
+import{_ as e}from"./index.vue_vue_type_script_setup_true_lang-sL8bRyZN.js";import{d as o,i as t,e as s,o as r}from"./index-BlcAyLQn.js";const m=`# 组件介绍
 
 vue-jenga的全局配置store，提供了配置类型与操作方法，涵盖了全局等比缩放相关计算属性  
 
