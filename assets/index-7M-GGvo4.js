@@ -1,4 +1,4 @@
-import{_ as e}from"./index.vue_vue_type_script_setup_true_lang-sL8bRyZN.js";import{d as t,i as o,e as p,o as s}from"./index-BlcAyLQn.js";const r=`# 组件介绍
+import{_ as e}from"./index.vue_vue_type_script_setup_true_lang-CKQGyf4m.js";import{d as t,i as o,e as p,o as s}from"./index-D_mIrYht.js";const r=`# 组件介绍
 
 此处收集了一些ts的工具类型，目前有：
 

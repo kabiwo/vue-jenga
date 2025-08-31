@@ -1,4 +1,4 @@
-import{_ as o}from"./index.vue_vue_type_script_setup_true_lang-sL8bRyZN.js";import{d as t,i as r,e as s,o as e}from"./index-BlcAyLQn.js";const m=`# 组件介绍
+import{_ as o}from"./index.vue_vue_type_script_setup_true_lang-CKQGyf4m.js";import{d as t,i as r,e as s,o as e}from"./index-D_mIrYht.js";const m=`# 组件介绍
 
 这里搜集了一些数据转换与生成的方法，目前有：  
 
