@@ -1,4 +1,4 @@
-import{_ as o}from"./index.vue_vue_type_script_setup_true_lang-220wOWlY.js";import{d as t,i as e,e as r,o as s}from"./index-BiiRSzpX.js";const i=`# 组件介绍
+import{_ as o}from"./index.vue_vue_type_script_setup_true_lang-6twE-pCU.js";import{d as t,i as e,e as r,o as s}from"./index-CO22PCF-.js";const i=`# 组件介绍
 
 这里归纳一些对文件的操作，目前有：  
 
