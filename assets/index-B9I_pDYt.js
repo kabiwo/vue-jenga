@@ -1,4 +1,4 @@
-import{_ as t}from"./index.vue_vue_type_script_setup_true_lang-vuDrIuGG.js";import{d as o,i as e,e as a,o as r}from"./index-8k-DGvTC.js";const m=`# 组件介绍
+import{_ as t}from"./index.vue_vue_type_script_setup_true_lang-220wOWlY.js";import{d as o,i as e,e as a,o as r}from"./index-BiiRSzpX.js";const m=`# 组件介绍
 
 提供VjInit方法，供在项目初始化时对vue-jenga进行初始化  
 

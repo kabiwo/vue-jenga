@@ -1,4 +1,4 @@
-import{_ as e}from"./index.vue_vue_type_script_setup_true_lang-vuDrIuGG.js";import{d as o,i as t,e as s,o as r}from"./index-8k-DGvTC.js";const m=`# 组件介绍
+import{_ as e}from"./index.vue_vue_type_script_setup_true_lang-220wOWlY.js";import{d as o,i as t,e as s,o as r}from"./index-BiiRSzpX.js";const m=`# 组件介绍
 
 为了适配vite的自动加载，以及解决element-plus的样式加载问题，定制了一个vite插件  
 
