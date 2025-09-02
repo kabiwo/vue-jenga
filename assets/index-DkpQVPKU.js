@@ -1,4 +1,4 @@
-import{d as l,b as m,k as e,e as s,j as c,F as i,ae as u,o as _,a9 as d,cQ as f}from"./index-CO22PCF-.js";import{_ as p}from"./index.vue_vue_type_script_setup_true_lang-6twE-pCU.js";const g=`# 组件介绍
+import{d as l,b as m,k as e,e as s,j as c,F as i,ae as u,o as _,a9 as d,cQ as f}from"./index-Dss3JQ3B.js";import{_ as p}from"./index.vue_vue_type_script_setup_true_lang-BMgYZb-1.js";const g=`# 组件介绍
 
 VjConfirm是对ElMessageBox进行的二次封装，主要解决繁琐的配置以及promise处理，应对用户确认场景  
 

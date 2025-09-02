@@ -1,4 +1,4 @@
-import{_ as e}from"./index.vue_vue_type_script_setup_true_lang-6twE-pCU.js";import{d as t,i as o,e as s,o as r}from"./index-CO22PCF-.js";const i=`# vue-jenga是什么
+import{_ as e}from"./index.vue_vue_type_script_setup_true_lang-BMgYZb-1.js";import{d as t,i as o,e as s,o as r}from"./index-Dss3JQ3B.js";const l=`# vue-jenga是什么
 
 是我作为前端老油条，经历过数个框架之后，秉承配置化的复用思想，经过反复重构迭代所形成的一系列工具/组件集合  
 
@@ -36,10 +36,12 @@ import{_ as e}from"./index.vue_vue_type_script_setup_true_lang-6twE-pCU.js";impo
       import Components from 'unplugin-vue-components/vite'
       import { ElementPlusResolver, VantResolver } from 'unplugin-vue-components/resolvers'
       import { VjResolver } from 'vue-jenga/utils'
+      import ElementPlus from 'unplugin-element-plus/vite'
       export default defineConfig({
         // 无关代码
         plugins: [
           // 无关代码
+          ElementPlus({}),//用于按需加载场景加载样式
           AutoImport({
             // 无关代码
             resolvers: [
@@ -92,4 +94,4 @@ import{_ as e}from"./index.vue_vue_type_script_setup_true_lang-6twE-pCU.js";impo
 + ~~表格组件VjTable~~
   + ~~文档~~
   + 表格组件增加注册单元格类型功能
-+ ~~开发工具链搭建~~`,c=t({__name:"index",setup(l){return(m,p)=>{const n=e;return r(),o(n,{mdStr:s(i)},null,8,["mdStr"])}}});export{c as default};
++ ~~开发工具链搭建~~`,c=t({__name:"index",setup(i){return(m,u)=>{const n=e;return r(),o(n,{mdStr:s(l)},null,8,["mdStr"])}}});export{c as default};

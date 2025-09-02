@@ -1,4 +1,4 @@
-import{_ as e}from"./index.vue_vue_type_script_setup_true_lang-6twE-pCU.js";import{d as t,i as o,e as s,o as r}from"./index-CO22PCF-.js";const i=`# 组件介绍
+import{_ as e}from"./index.vue_vue_type_script_setup_true_lang-BMgYZb-1.js";import{d as t,i as o,e as s,o as r}from"./index-Dss3JQ3B.js";const i=`# 组件介绍
 
 对axios进行了封装，提供配置管理与常用的Get/Post/Put/Del方法
 
