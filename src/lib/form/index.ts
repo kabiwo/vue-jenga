@@ -63,14 +63,14 @@ export type VjfEmptyProps = VjFormItemBase & { // 空格
 
 export type VjfRepeatProps = VjFormItemBase & { // 循环生成
   type: "repeat";
-  repeatItems?: VjFormItemProps[] | ((props: VjfRepeatProps, model: Record<string, unknown>) => VjFormItemProps[]);
+  repeatItems?: VjFormItemProps[] | ((props: VjfRepeatProps, model: Record<string, unknown>) => VjFormItemProps[]); // 循环项
 };
 
 export type VjfCustomProps = VjFormItemBase & { // 自定义
   type: "custom";
-  skDefault?: string;
-  formatter?: (value: unknown, item: VjFormItemProps, model: Record<string, unknown>) => string;
-  className?: string
+  skDefault?: string; // default插槽
+  formatter?: (value: unknown, item: VjFormItemProps, model: Record<string, unknown>) => string; // 非插槽场景下对值进行格式化
+  className?: string;  // 非插槽场景附加css样式类
 };
 
 export type VjFormItemProps = VjFormItemBase
@@ -96,12 +96,12 @@ export type VjFormPropsAttach = {
 };
 
 export type VjFormProps = {
-  col?: number;
-  form?: VjFormItemProps[];
-  elFormProps?: ElPropsType<typeof ElForm>;
-  slots?: Slots;
-  loading?: boolean;
-  remerge?: (item: VjFormItemProps, index: number) => Partial<VjFormItemProps>;
+  col?: number; // 列数
+  form?: VjFormItemProps[]; // 表单项数组
+  elFormProps?: ElPropsType<typeof ElForm>;  // ElForm类型
+  slots?: Slots; // 注入插槽
+  loading?: boolean;  // 加载状态
+  remerge?: (item: VjFormItemProps, index: number) => Partial<VjFormItemProps>; // 渲染前对生成的表单配置项数组再进行一次额外的merge处理
 };
 
 export type VjFormPropsTotal = VjFormProps & VjFormPropsAttach;

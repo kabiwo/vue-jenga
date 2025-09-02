@@ -31,7 +31,53 @@ const menus = ref<VjMenuItem[]>([
   }, 
   {
     name: 'Form',
-    path: '/form'
+    path: '/form',
+    children: [
+      {
+        name: '表单',
+        path: '/form/'
+      },
+      {
+        name: 'Cascader',
+        path: '/form/cascader'
+      },
+      {
+        name: 'Custom',
+        path: '/form/custom'
+      },
+      {
+        name: '时间类',
+        path: '/form/date'
+      },
+      {
+        name: 'Empty',
+        path: '/form/empty'
+      },
+      {
+        name: '输入类',
+        path: '/form/input'
+      },
+      {
+        name: 'Repeat',
+        path: '/form/repeat'
+      },
+      {
+        name: '选择类',
+        path: '/form/select'
+      },
+      {
+        name: 'Sub',
+        path: '/form/sub'
+      },
+      {
+        name: 'Tree',
+        path: '/form/tree'
+      },
+      {
+        name: 'Upload',
+        path: '/form/upload'
+      }
+    ]
   },
   {
     name: 'Menu',

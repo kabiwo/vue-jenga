@@ -36,10 +36,12 @@
       import Components from 'unplugin-vue-components/vite'
       import { ElementPlusResolver, VantResolver } from 'unplugin-vue-components/resolvers'
       import { VjResolver } from 'vue-jenga/utils'
+      import ElementPlus from 'unplugin-element-plus/vite'
       export default defineConfig({
         // 无关代码
         plugins: [
           // 无关代码
+          ElementPlus({}),//用于按需加载场景加载样式
           AutoImport({
             // 无关代码
             resolvers: [

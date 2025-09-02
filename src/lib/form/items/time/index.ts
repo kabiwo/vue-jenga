@@ -6,8 +6,8 @@ export type VjfTimeModel = ElModelType<typeof ElTimePicker>;
 
 export type VjfTimeProps = VjFormItemBase & {
   type: "time";
-  elTimeProps?: ElPropsType<typeof ElTimePicker>;
-  elTimeEmit?: ElEventType<typeof ElTimePicker>;
+  elTimeProps?: ElPropsType<typeof ElTimePicker>; // ElTime参数
+  elTimeEmit?: ElEventType<typeof ElTimePicker>;  // ElTime事件
 };
 
 export type VjfTimePropsTotal = VjFormItemAttach & VjfTimeProps;

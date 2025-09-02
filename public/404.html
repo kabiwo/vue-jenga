@@ -1,0 +1,23 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8">
+  <title>Redirecting...</title>
+  <script type="text/javascript">
+    // 获取当前路径
+    var path = window.location.pathname;
+    // 获取查询字符串
+    var search = window.location.search;
+    // 获取哈希片段
+    var hash = window.location.hash;
+    // 构建新的URL，指向index.html并附加原始路径等信息
+    // 这里使用 sessionStorage 来传递路径
+    sessionStorage.setItem('redirect', path + search + hash);
+    // 跳转到应用的主页。如果你的仓库不在站点根目录，请将 '/' 替换为 '/<REPO_NAME>/'
+    window.location.href = '/vue-jenga/'; // 务必替换 <REPO_NAME>
+  </script>
+</head>
+<body>
+  <noscript>Please enable JavaScript to continue.</noscript>
+</body>
+</html>

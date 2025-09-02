@@ -9,11 +9,13 @@ import App from './App.vue'
 
 // import { createRouter, createWebHistory } from "vue-router/auto";
 import { routes } from "vue-router/auto-routes";
-import { createRouter, createWebHistory } from 'vue-router';
+import { createRouter, createWebHashHistory, createWebHistory } from 'vue-router';
 import { createPinia } from 'pinia'
 
 const router = createRouter({
-  history: createWebHistory(import.meta.env.VITE_BUILD_ROUTER_PATH),
+  // history: createWebHistory(import.meta.env.VITE_BUILD_ROUTER_PATH),
+  // history: createWebHistory(),
+  history: createWebHashHistory(),
   routes,
 });
 

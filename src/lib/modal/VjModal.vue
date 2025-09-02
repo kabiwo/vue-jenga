@@ -80,8 +80,8 @@ const show = (data?: unknown) => {
 };
 
 defineExpose({
-  dialog: dialogRef,
-  show,
-  dialogShow
+  dialog: dialogRef,  // ElDialog实例类型
+  show, // 显示弹窗方法
+  dialogShow  // 弹窗显示状态
 });
 </script>

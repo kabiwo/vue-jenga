@@ -5,8 +5,9 @@
       <div>custom{{ consoleScope(scope) }}</div>
     </template>
   </VjForm>
-
+  <markdown :mdStr="demo1" />
   <VjForm :form :col="5" :remerge />
+  <markdown :mdStr="demo2" />
 </template>
 <script lang="ts" setup>
 import { ref } from 'vue';
@@ -14,6 +15,8 @@ import { VjForm, type VjFormItemProps, type VjFormProps } from 'vue-jenga/form'
 import { type VjOptions } from 'vue-jenga/utils'
 import { list } from 'radash';
 import mdStr from './index.md?raw'
+import demo1 from './demo1.md?raw'
+import demo2 from './demo2.md?raw'
 import { VjfcDateRange, VjfcDatetime, VjfcDatetimeRange, VjfcTextarea } from 'vue-jenga/form';
 // import axios from 'axios';
 

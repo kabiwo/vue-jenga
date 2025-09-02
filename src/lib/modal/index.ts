@@ -8,24 +8,24 @@ import type { Slots } from "vue";
 export { VjModal, VjModalForm };
 
 export type VjModalProps = {
-  title?: string;
-  width?: number | string;
-  cancelText?: string;
-  confirmText?: string;
-  confirmFunc?: (value?: unknown) => Promise<boolean>;
-  confirmCheckFunc?: (value?: unknown) => Promise<boolean>;
-  showFunc?: (value: unknown) => Promise<boolean>;
-  noFooter?: boolean;
-  elDialogProps?: ElPropsType<typeof ElDialog>;
-  elDialogEmit?: ElEventType<typeof ElDialog>;
-  slots?: Slots;
-  skDefault?: string;
-  skHeader?: string;
+  title?: string; // 标题
+  width?: number | string;  // 宽度
+  cancelText?: string;  // 取消按钮文本
+  confirmText?: string; // 确定按钮文本
+  confirmFunc?: (value?: unknown) => Promise<boolean>;  // 确定点击函数
+  confirmCheckFunc?: (value?: unknown) => Promise<boolean>; // 触发确定点击函数前的校验函数
+  showFunc?: (value: unknown) => Promise<boolean>;  // 弹窗展开后的回调函数
+  noFooter?: boolean; // 不显示下方按钮
+  elDialogProps?: ElPropsType<typeof ElDialog>; // ElDialog参数
+  elDialogEmit?: ElEventType<typeof ElDialog>;  // ElDialog事件
+  slots?: Slots;  // 插槽
+  skDefault?: string; // default插槽
+  skHeader?: string;  // header插槽
 };
 
 export type VjModalFormProps = VjModalProps & {
-  formProps?: VjFormProps;
+  formProps?: VjFormProps;  // VjForm配置
 
-  skPre?: string;
-  skPost?: string;
+  skPre?: string; // 表单前pre插槽
+  skPost?: string;  // 表单后post插槽
 };

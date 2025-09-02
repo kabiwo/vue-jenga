@@ -99,11 +99,11 @@ const validate = async () => {
 };
 
 defineExpose({
-  form: formRef,
-  modal: modalRef,
-  show,
-  setData,
-  getData,
-  validate,
+  form: formRef,  // VjForm实例
+  modal: modalRef,  // VjModal实例
+  show, // 显示函数
+  setData,  // 设置表单数据
+  getData,  // 获取表单数据
+  validate, // 触发表单验证
 });
 </script>
