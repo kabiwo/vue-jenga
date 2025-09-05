@@ -14,7 +14,7 @@
 
 1. 通过包管理器安装vue-jenga  
 
-2. 按照提示，确保所需的peerDependencies已安装，目前有vue、element-plus与pinia  
+2. 按照提示，确保所需的peerDependencies已安装，目前有vue、element-plus、pinia与axios    
 
 3. 在main.ts中，引入初始化函数，并在app挂载后调用初始化函数VjInit  
 
