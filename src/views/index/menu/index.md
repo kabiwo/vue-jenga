@@ -47,6 +47,7 @@ export type VjMenuProps = { // 组件接收参数
   elProps?: Partial<MenuProps>; // ElMenu参数
   elEmits?: Partial<MenuEmits>; // ElMenu事件
   menus: VjMenuItem[];  // 菜单配置项数组
+  iconFunc?: (item: VjMenuItem) => string;  // 菜单图标处理函数返回值作为图标ElIcon的class
 };
 ```
 

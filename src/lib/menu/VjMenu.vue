@@ -7,7 +7,7 @@
 </template>
 <script setup lang="ts">
 import { ElIcon, ElMenuItem, ElMenuItemGroup, ElSubMenu, ElMenu, ElScrollbar } from "element-plus";
-import { h, ref, type VNode } from "vue";
+import { computed, h, ref, type VNode } from "vue";
 import { type VjMenuProps, type VjMenuItem } from ".";
 import { _VjOnEmitsFromEmits } from "../utils";
 
@@ -15,19 +15,17 @@ const props = defineProps<VjMenuProps>();
 
 const elMenuRef = ref<InstanceType<typeof ElMenu>>();
 
+const iconFunc = computed(() => {
+  return props.iconFunc || ((item: VjMenuItem) => item.icon);
+});
+
 const getTitle = (item: VjMenuItem): VNode[] => {
   let arr: VNode[] = [h("span", null, item.name)];
   if (item.icon) {
     arr.unshift(
       h(ElIcon,
         {
-          class: (() => {
-            if (item.icon?.startsWith("i-")) {
-              return item.icon;
-            } else {
-              return undefined;
-            }
-          })(),
+          class: iconFunc.value(item),
         }
       ),
     );
