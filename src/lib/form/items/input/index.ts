@@ -8,6 +8,9 @@ export type VjfInputProps = VjFormItemBase & {
   type: "input";
   elInputProps?: ElPropsType<typeof ElInput>; // ElInput参数
   elInputEmit?: ElEventType<typeof ElInput>;  // ElInput事件
+  skPrefix?: string;  // prefix插槽
+  skSuffix?: string;  // suffix插槽
+  skPrepend?: string;  // prepend插槽
   skAppend?: string;  // append插槽
 };
 
