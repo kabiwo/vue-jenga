@@ -34,7 +34,7 @@ export const useVjConfStore = defineStore("vj-conf", () => {
 
   const rootFont = computed(() => {
     const { width } = useWindowSize();
-    let scale = parseInt((window.outerWidth / window.innerWidth).toFixed(2));
+    let scale = parseFloat((window.outerWidth / window.innerWidth).toFixed(2));
     let c = conf.value;
     const number = ((c.baseFont * scale) / c.baseWidowWidth) * width.value * scale;
     return number;
