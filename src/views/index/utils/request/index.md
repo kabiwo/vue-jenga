@@ -26,6 +26,8 @@ export type VjRequestConf = { // 配置参数
   interceptorResponseErr: (err: unknown) => unknown;
   // 通用方法处理函数（按照各项目约定，实现自定义错误码处理等）
   responseGlobalCheck: <T>(response: AxiosResponse<T, unknown>, options?: VjRequestOptions) => [true, T] | [false, unknown];
+  // 统一写在VjGet等方法中的catch处理，试图捕获csrf等拦截器捕获不到的错误
+  globalErrorHandle: <T = unknown>(err: unknown) => Promise<T>;
 }
 
 export type VjRequestOptions = AxiosRequestConfig & Record<string, unknown>;  // 请求参数
@@ -33,6 +35,8 @@ export type VjRequestOptions = AxiosRequestConfig & Record<string, unknown>;  //
 const VjRequestSetConf: (conf: Partial<VjRequestConf>) => void  // 写入配置
 
 const VjRequestGetConf: () => Partial<VjRequestConf>   // 获取配置
+
+const VjRequestInstance: AxiosInstance    // 暴露统一的axiosInstance
 
 const VjRequestInit: (conf?: Partial<VjRequestConf> | undefined) => void  // 初始化拦截器，写入初始化配置
 

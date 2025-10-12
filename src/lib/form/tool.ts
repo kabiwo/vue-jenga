@@ -1,6 +1,7 @@
 import { VjObjDeepMerge } from "../utils";
 import type { VjfDateProps } from "./items/date";
 import type { VjfInputProps } from "./items/input";
+import type { VjfSelectProps } from "./items/select";
 
 export const VjfcTextarea = (conf: Omit<VjfInputProps, 'type'>): VjfInputProps => {
   let pre: Partial<VjfInputProps> = {
@@ -51,4 +52,14 @@ export const VjfcDatetimeRange = (conf: Omit<VjfDateProps, 'type'>): VjfDateProp
     }
   };
   return VjObjDeepMerge(pre, conf) as VjfDateProps;
+};
+
+export const VjfcSelectMulti = (conf: Omit<VjfSelectProps, 'type'>): VjfSelectProps => {
+  let pre: Partial<VjfSelectProps> = {
+    type: 'select',
+    elSelectProps: {
+      multiple: true,
+    },
+  };
+  return VjObjDeepMerge(pre, conf) as VjfSelectProps;
 };

@@ -25,6 +25,7 @@ declare global {
   const VjPut: typeof import('vue-jenga/utils')['VjPut']
   const VjRequestGetConf: typeof import('vue-jenga/utils')['VjRequestGetConf']
   const VjRequestInit: typeof import('vue-jenga/utils')['VjRequestInit']
+  const VjRequestInstance: typeof import('vue-jenga/utils')['VjRequestInstance']
   const VjRequestSetConf: typeof import('vue-jenga/utils')['VjRequestSetConf']
   const VjResolver: typeof import('vue-jenga/utils')['VjResolver']
   const VjSlotRender: typeof import('vue-jenga/utils')['VjSlotRender']

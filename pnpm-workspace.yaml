@@ -1,2 +1,3 @@
 overrides:
+  dist: link:dist
   vue-jenga: 'link:'

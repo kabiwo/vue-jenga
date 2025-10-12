@@ -37,6 +37,7 @@ const utilsCollect = [
   'VjPost',
   'VjPut',
   'VjDel',
+  'VjRequestInstance',
   'VjRequestGetConf',
   'VjRequestInit',
   'VjRequestSetConf',

@@ -52,6 +52,22 @@
         type: 'select',
         options: commonOptions
       },
+      VjfcSelectMulti({
+        label: '本地多选',
+        code: 'multi-select-local',
+        options: commonOptions,
+      }),
+      VjfcSelectMulti({
+        label: '远程多选',
+        code: 'multi-select-remote',
+        remote: true,
+        remoteInitQuery: true,
+        remoteFunc: async () => {
+          console.log('search');
+          return commonOptions
+        },
+        remoteInitOptions: async () => commonOptions,
+      }),
       {
         label: '子表',
         code: 'sub',
@@ -110,13 +126,13 @@
         options: commonOptions
       },
       {
-        label: '多选',
+        label: '复选',
         code: 'checkbox',
         type: 'checkbox',
         options: commonOptions
       },
       {
-        label: '多选按钮',
+        label: '复选按钮',
         code: 'checkbox-button',
         type: 'checkbox',
         button: true,

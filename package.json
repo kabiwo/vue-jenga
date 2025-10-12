@@ -83,9 +83,9 @@
     "vue-tsc": "^2.2.12"
   },
   "peerDependencies": {
+    "axios": "^1.11.0",
     "element-plus": "^2.10.5",
     "pinia": "^3.0.3",
-    "vue": "^3.5.18",
-    "axios": "^1.11.0"
+    "vue": "^3.5.18"
   }
 }

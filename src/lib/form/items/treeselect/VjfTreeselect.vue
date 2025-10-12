@@ -60,15 +60,19 @@ const onChange = (value?: unknown) => {
   props.onChange && props.onChange(v, props, props.model!);
 };
 
-watch(props, () => {
+const optionsCompted = computed(() => {
   if (typeof props.options === "function") {
-    data.value = props.options(props, props.model!) || [];
+    return props.options(props, props.model!) || [];
   } else {
-    data.value = (props.options as VjOptions) || [];
+    return (props.options as VjOptions) || [];
   }
+});
+
+watch(optionsCompted, () => {
+  data.value = optionsCompted.value;
 }, {
   immediate: true
-})
+});
 
 const paramAttach = computed<Record<string, unknown>>(() => {
   if (!props.remoteParamAttach) {

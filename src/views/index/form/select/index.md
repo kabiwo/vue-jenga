@@ -1,6 +1,6 @@
 # 组件介绍
 
-用于进行选择的一系列组件，包括select、radio、checkbox
+用于进行选择的一系列组件，包括select、radio、checkbox，以及配置预处理的VjfcSelectMulti
 
 # 使用方法
 
