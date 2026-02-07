@@ -34,6 +34,18 @@ export type VjfTreeSelectProps = VjFormItemBase & {
 
 ```
 
+# 外部交互
+
+组件通过defineExpose暴露如下内容  
+
+```ts
+defineExpose({
+  model,  // 值
+  props,  // 参数
+  treeSelectRef // el-tree-select实例ref
+});
+```
+
 # 运行实例
 
 参看[VjForm实例1](/#/form/)中相关项

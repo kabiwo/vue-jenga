@@ -11,5 +11,10 @@
 export type VjfRepeatProps = VjFormItemBase & { // 循环生成
   type: "repeat";
   repeatItems?: VjFormItemProps[] | ((props: VjfRepeatProps, model: Record<string, unknown>) => VjFormItemProps[]); // 循环项
+  repeatTime?: number; // 单项循环次数
 };
 ```
+
+# 外部交互
+
+根据repeat的组件，各自有自己的实例

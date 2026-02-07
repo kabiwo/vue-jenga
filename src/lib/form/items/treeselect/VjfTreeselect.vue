@@ -1,6 +1,6 @@
 <template>
   <div>
-    <el-tree-select v-model="model" :data="data" :placeholder="props.placeholder" clearable filterable check-strictly :disabled="props.disabled"
+    <el-tree-select ref="treeSelectRef" v-model="model" :data="data" :placeholder="props.placeholder" clearable filterable check-strictly :disabled="props.disabled"
       :loading="loading" :remote="props.remote" :remote-method="search" @change="onChange"
       v-bind="(selectProps as ElPropsType<typeof ElTreeSelect>)" v-on="props.elSelectEmit || {}">
       <template v-if="props.skDefault && slots[props.skDefault]" #default="scope">
@@ -34,37 +34,41 @@
 import { ElTreeSelect } from 'element-plus';
 import type { VjfTreeSelectModel, VjfTreeSelectPropsTotal } from '.';
 import { VjSlotRender, type ElPropsType, type VjOptions } from '../../../utils';
-import { computed, onMounted, ref, watch } from 'vue';
+import { computed, onMounted, ref, useAttrs, watch } from 'vue';
 
 const model = defineModel<VjfTreeSelectModel>();
-const props = defineProps<VjfTreeSelectPropsTotal>();
+const p = defineProps<VjfTreeSelectPropsTotal>();
+const attrs = useAttrs();
+const props = computed(() => {return Object.assign({}, p, attrs)});
+
+const treeSelectRef = ref<InstanceType<typeof ElTreeSelect>>();
 
 const data = ref<VjOptions>([]);
 
 const selectProps = computed(() => {
-  if (typeof props.elSelectProps === "function") {
-    return props.elSelectProps(props, props.model!) || {};
+  if (typeof props.value.elSelectProps === "function") {
+    return props.value.elSelectProps(props.value, props.value.model!) || {};
   }
-  return props.elSelectProps || {};
+  return props.value.elSelectProps || {};
 });
 
 const slots = computed(() => {
-  return props.slots || {};
+  return props.value.slots || {};
 });
 
 const onChange = (value?: unknown) => {
   let v = value;
-  if (props.onChangePrefix) {
-    v = props.onChangePrefix(data.value, value, props, props.model!);
+  if (props.value.onChangePrefix) {
+    v = props.value.onChangePrefix(data.value, value, props.value, props.value.model!);
   }
-  props.onChange && props.onChange(v, props, props.model!);
+  props.value.onChange && props.value.onChange(v, props.value, props.value.model!);
 };
 
 const optionsCompted = computed(() => {
-  if (typeof props.options === "function") {
-    return props.options(props, props.model!) || [];
+  if (typeof props.value.options === "function") {
+    return props.value.options(props.value, props.value.model!) || [];
   } else {
-    return (props.options as VjOptions) || [];
+    return (props.value.options as VjOptions) || [];
   }
 });
 
@@ -75,27 +79,27 @@ watch(optionsCompted, () => {
 });
 
 const paramAttach = computed<Record<string, unknown>>(() => {
-  if (!props.remoteParamAttach) {
+  if (!props.value.remoteParamAttach) {
     return {};
   }
-  if (typeof props.remoteParamAttach === "function") {
-    return props.remoteParamAttach(props, props.model!);
+  if (typeof props.value.remoteParamAttach === "function") {
+    return props.value.remoteParamAttach(props.value, props.value.model!);
   }
-  return props.remoteParamAttach;
+  return props.value.remoteParamAttach;
 });
 
 const loading = ref<boolean>(false);
 const search = async (query: string) => {
-  if (!props.remote) {
+  if (!props.value.remote) {
     return;
   }
-  const initOptions = props.remoteInitOptions ? await props.remoteInitOptions(props, props.model) : [];
-  if (!props.remoteFunc) {
+  const initOptions = props.value.remoteInitOptions ? await props.value.remoteInitOptions(props.value, props.value.model) : [];
+  if (!props.value.remoteFunc) {
     data.value = initOptions.filter((item) => item.label.includes(query));
     return;
   }
   loading.value = true;
-  let res = await props.remoteFunc({query, ...paramAttach.value}, props, props.model!);
+  let res = await props.value.remoteFunc({query, ...paramAttach.value}, props.value, props.value.model!);
   loading.value = false;
   if (res) {
     if (!query) {
@@ -109,9 +113,15 @@ const search = async (query: string) => {
 };
 
 onMounted(async () => {
-  if (props.remoteInitOptions) {
-    data.value = await props.remoteInitOptions(props, props.model);
+  if (props.value.remoteInitOptions) {
+    data.value = await props.value.remoteInitOptions(props.value, props.value.model);
   }
-  props.remoteInitQuery && search("");
+  props.value.remoteInitQuery && search("");
+});
+
+defineExpose({
+  model,  // 值
+  props,  // 参数
+  treeSelectRef // el-tree-select实例ref
 });
 </script>

@@ -16,7 +16,7 @@
       </template>
     </el-table>
     <div ref="pagiBoxRef" v-if="props.total">
-      <el-pagination v-model:current-page="pIndex" v-model:page-size="pSize" hide-on-single-page :total="props.total"
+      <el-pagination ref="elPagiRef" v-model:current-page="pIndex" v-model:page-size="pSize" hide-on-single-page :total="props.total"
         layout="->, total, sizes, prev, pager, next, jumper" v-bind="props.elPagiProps" v-on="props.elPagiEmit || {}">
         <template v-if="props.skPagiDefault && slots[props.skPagiDefault]" #default="scope">
           <component :is="VjSlotRender(slots[props.skPagiDefault]!, scope)" />

@@ -33,6 +33,10 @@ export type VjFormItemAttach = {  // 父组件向子组件注入的附加参数
 };
 ```
 
+# 外部交互
+
+default插槽内部逻辑由用户自行控制
+
 # 运行实例
 
 参看[VjForm实例1](/#/form/)中相关项

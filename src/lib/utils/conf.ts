@@ -1,7 +1,8 @@
 import { useWindowSize } from "@vueuse/core";
 import type { UploadRequestOptions } from "element-plus";
 import { defineStore } from "pinia";
-import { computed, ref, watch } from "vue";
+import { isArray } from "radash";
+import { computed, ref, watch, type Component } from "vue";
 
 export type VjConf = {
   remEnable: boolean;
@@ -9,6 +10,11 @@ export type VjConf = {
   baseFont: number;
 
   uploadFunc?: (options: UploadRequestOptions) => Promise<boolean>;
+};
+
+export type VjConfRegComp = {
+  type: string;
+  comp?: Component;
 };
 
 export const VjConfBase: VjConf = {
@@ -77,6 +83,23 @@ export const useVjConfStore = defineStore("vj-conf", () => {
     })
   };
 
+  const repo = ref<Record<string, Component | undefined>>({});
+  const repoReg = (tars: VjConfRegComp | VjConfRegComp[]) => {
+    if (isArray(tars)) {
+      tars.forEach((v) => {
+        repo.value[v.type] = v.comp;
+      });
+    } else {
+      repo.value[tars.type] = tars.comp;
+    }
+  };
+  const repoClear = () => {
+    repo.value = {};
+  };
+  const repoGet = (type?: string) => {
+    return type?repo.value[type]:repo.value;
+  };
+
   return {
     setConf,
     getConf,
@@ -87,6 +110,11 @@ export const useVjConfStore = defineStore("vj-conf", () => {
     scaleRate,
     getScaledNum,
 
-    init
+    init,
+
+    repo,
+    repoReg,
+    repoClear,
+    repoGet,
   };
 });

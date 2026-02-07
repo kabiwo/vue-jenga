@@ -32,6 +32,30 @@ const VjfcDatetimeRange: (conf: Omit<VjfDateProps, "type">) => VjfDateProps
 
 ```
 
+# 外部交互
+
+date组件通过defineExpose暴露内容与类型如下：
+```ts
+const model = defineModel<VjfDateModel>({});
+const props: ComputedRef<Readonly<LooseRequired<VjfDatePropsTotal>> & {} & Data>;
+const datePickerRef = ref<InstanceType<typeof ElDatePicker>>();
+defineExpose({
+  model, // 值
+  props,  // 参数
+  datePickerRef // el-date-picker实例ref
+});
+```
+time组件通过defineExpose暴露内容与类型如下：
+```ts
+const model = defineModel<VjfDateModel>({});
+const props: ComputedRef<Readonly<LooseRequired<VjfDatePropsTotal>> & {} & Data>;
+const timePickerRef = ref<InstanceType<typeof ElTimePicker>>();
+defineExpose({
+  model, // 值
+  props,  // 参数
+  timePickerRef // el-time-picker实例ref
+});
+```
 
 # 运行实例
 

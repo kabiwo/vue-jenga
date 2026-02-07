@@ -71,6 +71,36 @@ const cloumns = ref<VjTableConfigItem[]>([  // 列定义
     prop: 'custom',
     skDefault: 'customTemplate',  // 通过default插槽开启自定义模式
     fixed: 'right',
+  },
+  {
+    label: '注册',
+    prop: 'table-reg1',
+    fixed: 'right',
+    type: 'table-reg1', // 注册的子组件标识符
+    regProps: {
+      name: 'abc'
+    },
+    regEmit: {
+      call: (name: string) => {
+        alert(name);
+      }
+    }
+  },
+  {
+    label: '操作',
+    prop: 'table-fold-link',
+    fixed: 'right',
+    type: 'fold-link',
+    width: 30,
+    regProps: {
+      links: list(0, 20, i => {
+        return {
+          label: `link${i + 1}`,
+          func: () => alert(`link${i + 1}`)
+        };
+      }),
+      num: 3
+    }
   }
 ]);
 

@@ -1,6 +1,6 @@
 <template>
   <div>
-    <el-cascader-panel v-if="props.panel" v-model="model" :options="props.options || []" :props="cascaderProps"
+    <el-cascader-panel ref="cascaderPanelRef" v-if="props.panel" v-model="model" :options="props.options || []" :props="cascaderProps"
       class="vj-w-full!" @change="onChange" v-bind="props.elCascaderProps || {}" v-on="props.elCascaderEmit || {}">
       <template v-if="props.skDefault && slots[props.skDefault]" #default="scope">
         <component :is="VjSlotRender(slots[props.skDefault]!, scope)" />
@@ -9,7 +9,7 @@
         <component :is="VjSlotRender(slots[props.skEmpty]!, scope)" />
       </template>
     </el-cascader-panel>
-    <el-cascader v-else v-model="model" clearable :options="props.options || []" :props="cascaderProps"
+    <el-cascader ref="cascaderRef" v-else v-model="model" clearable :options="props.options || []" :props="cascaderProps"
       :placeholder="props.placeholder" class="vj-w-full!" @change="onChange" v-bind="props.elCascaderProps || {}"
       v-on="props.elCascaderEmit || {}">
       <template v-if="props.skDefault && slots[props.skDefault]" #default="scope">
@@ -39,19 +39,25 @@
 <script setup lang="ts">
 import { ElCascader, ElCascaderPanel } from "element-plus";
 import { type ElCascaderLazyLoad, type VjfCascaderModel, type VjfCascaderPropsTotal } from ".";
-import { computed } from "vue";
+import { computed, onMounted, ref, useAttrs, type ComponentPublicInstance, type Ref } from "vue";
 import { VjSlotRender } from "../../../utils";
 import type { CascaderProps } from "element-plus/es/components/index.mjs";
 
 const model = defineModel<VjfCascaderModel>();
-const props = defineProps<VjfCascaderPropsTotal>();
+const p = defineProps<VjfCascaderPropsTotal>();
+const attrs = useAttrs();
+const props = computed(() => {return Object.assign({}, p, attrs)});
+
+const cascaderRef = ref<InstanceType<typeof ElCascader>>();
+const cascaderPanelRef = ref<InstanceType<typeof ElCascaderPanel>>();
+
 
 const slots = computed(() => {
-  return props.slots || {};
+  return props.value.slots || {};
 });
 
 const onChange = (value?: unknown) => {
-  props.onChange && props.onChange(value, props, props.model!);
+  props.value.onChange && props.value.onChange(value, props.value, props.value.model!);
 };
 
 const lazyLoad: ElCascaderLazyLoad = (node, resolve) => {
@@ -60,8 +66,15 @@ const lazyLoad: ElCascaderLazyLoad = (node, resolve) => {
 
 const cascaderProps = computed<CascaderProps>(() => {
   return Object.assign({
-    lazy: props.lazy,
-    lazyLoad: (props.lazyLoadFunc ? props.lazyLoadFunc(props, props.model!) : props.lazyLoad) || lazyLoad
-  }, props.props || {});
+    lazy: props.value.lazy,
+    lazyLoad: (props.value.lazyLoadFunc ? props.value.lazyLoadFunc(props.value, props.value.model!) : props.value.lazyLoad) || lazyLoad
+  }, props.value.props || {});
+});
+
+defineExpose({
+  model,  // 绑定值
+  props,  // 参数
+  cascaderRef,  // el-cascader实例ref
+  cascaderPanelRef   // el-cascader-panel实例ref
 });
 </script>

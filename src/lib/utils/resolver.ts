@@ -2,7 +2,35 @@ import { flat } from "radash";
 
 // copy & edit from element-plus-resolver
 
-const formClassCollect = [ 'form', 'form-item', 'row', 'col', 'input', 'input-number', 'loading', 'select', 'select-v2', 'option', 'date-picker', 'time-picker', 'radio-group', 'radio', 'radio-button', 'checkbox-group', 'checkbox', 'checkbox-button', 'switch', 'upload', 'dialog', 'button', 'cascader', 'cascader-panel', 'tree-select']
+const formClassCollect = [ 
+  'form', 
+  'form-item', 
+  'row', 
+  'col', 
+  'input', 
+  'input-number', 
+  'loading', 
+  'select', 
+  'select-v2', 
+  'option', 
+  'date-picker', 
+  'time-picker', 
+  'radio-group', 
+  'radio', 
+  'radio-button', 
+  'checkbox-group', 
+  'checkbox', 
+  'checkbox-button', 
+  'switch', 
+  'upload', 
+  'dialog', 
+  'button', 
+  'cascader', 
+  'cascader-panel', 
+  'tree-select',
+  'button',
+  'icon'
+];
 
 const fromAndEffectInfo: Record<string, string[]> = {
   VjMenu: ['menu', 'scrollbar', 'menu', 'menu-item', 'menu-item-group', 'sub-menu'],
@@ -10,7 +38,7 @@ const fromAndEffectInfo: Record<string, string[]> = {
   VjConfirm: ['utils', 'message-box'],
   VjForm: ['form', ...formClassCollect],
   VjModal: ['modal', 'dialog', 'button'],
-  VjModalForm: ['modal', ...formClassCollect]
+  VjModalForm: ['modal', ...formClassCollect],
 };
 
 const formCollect = [
@@ -45,7 +73,11 @@ const utilsCollect = [
   'VjResolver',
 
   'VjSlotRender'
-]
+];
+
+const otherCollect: Record<string, string[]> = {
+  VjFoldLink: ['link', 'dropdown', 'dropdown-item', 'dropdown-menu']
+}
 
 export interface ImportInfo {
   as?: string
@@ -155,6 +187,13 @@ function resolveComponent(name: string, options: VjResolverOptionsResolved): Com
       return {
         name,
         from: 'vue-jenga/form'
+      };
+    }
+    if (otherCollect[name]) {
+      return {
+        name,
+        from: 'vue-jenga/other',
+        sideEffects: getSideEffects(otherCollect[name] || [], options),
       };
     }
     console.log(name);

@@ -1,6 +1,6 @@
 <template>
   <div>
-    <el-switch v-model="model" @change="onChange" v-bind="props.elSwitchProps" v-on="props.elSwitchEmit || {}">
+    <el-switch ref="switchRef" v-model="model" @change="onChange" v-bind="props.elSwitchProps" v-on="props.elSwitchEmit || {}">
       <template v-if="props.skActiveAction && slots[props.skActiveAction]" #active-action>
         <component :is="VjSlotRender(slots[props.skActiveAction]!, { props, model })" />
       </template>
@@ -14,16 +14,26 @@
 import { type VjfSwitchModel, type VjfSwitchPropsTotal } from ".";
 import { ElSwitch } from "element-plus";
 import { VjSlotRender } from "../../../utils";
-import { computed } from "vue";
+import { computed, ref, useAttrs } from "vue";
 
 const model = defineModel<VjfSwitchModel>();
-const props = defineProps<VjfSwitchPropsTotal>();
+const p = defineProps<VjfSwitchPropsTotal>();
+const attrs = useAttrs();
+const props = computed(() => {return Object.assign({}, p, attrs)});
+
+const switchRef = ref<InstanceType<typeof ElSwitch>>();
 
 const slots = computed(() => {
-  return props.slots || {};
+  return props.value.slots || {};
 });
 
 const onChange = (value?: unknown) => {
-  props.onChange && props.onChange(value, props, props.model!);
+  props.value.onChange && props.value.onChange(value, props.value, props.value.model!);
 };
+
+defineExpose({
+  model,
+  props,
+  switchRef
+});
 </script>

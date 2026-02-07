@@ -9,7 +9,8 @@ const components = {
   table: 'src/lib/table/index.ts',
   modal: 'src/lib/modal/index.ts',
   utils: 'src/lib/utils/index.ts',
-  menu: 'src/lib/menu/index.ts'
+  menu: 'src/lib/menu/index.ts',
+  other: 'src/lib/other/index.ts',
 }
 
 export default defineConfig({

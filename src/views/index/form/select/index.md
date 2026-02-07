@@ -66,6 +66,47 @@ export type VjfCheckboxProps = VjFormItemBase & {
 
 ```
 
+# 外部交互
+
+select组件通过defineExpose暴露如下内容
+
+```ts
+defineExpose({
+  model,  // 值
+  props,  // 参数
+  selectV2Ref,  // el-select-v2实例的ref
+  selectRef // el-select实例的ref
+});
+```
+
+radio组件通过defineExpose暴露如下内容
+
+```ts
+defineExpose({
+  model,  // 值
+  props,  // 参数
+  radioGroupRef,  // el-radio-group实例ref
+  radioRefs,  // el-radio实例ref
+  radioButtonRefs // el-radio-button实例ref
+});
+```
+
+checkbox组件通过defineExpose暴露如下内容
+
+```ts
+const allControler: (check?: boolean | undefined) => void;
+defineExpose({
+  model,  // 值
+  props,  // 参数
+  checkboxGroupRef, // el-checkbox-group实例ref
+  checkboxRefs, // el-checkbox实例ref
+  checkboxButtonRefs, // el-checkbox-button实例ref
+  checkAllRef,  // 作为checkall的el-checkbox的实例ref
+
+  allControler  // 批量设置选中状态
+});
+```
+
 # 运行实例
 
 参看[VjForm实例1](/#/form/)中相关项

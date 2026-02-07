@@ -13,6 +13,7 @@ declare global {
   const VjConfirm: typeof import('vue-jenga/utils')['VjConfirm']
   const VjDel: typeof import('vue-jenga/utils')['VjDel']
   const VjDownFile: typeof import('vue-jenga/utils')['VjDownFile']
+  const VjFoldLink: typeof import('vue-jenga/other')['VjFoldLink']
   const VjForm: typeof import('vue-jenga/form')['VjForm']
   const VjGet: typeof import('vue-jenga/utils')['VjGet']
   const VjInit: typeof import('vue-jenga/utils')['VjInit']

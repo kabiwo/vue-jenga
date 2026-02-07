@@ -25,4 +25,17 @@ export type VjfUploadProps = VjFormItemBase & {
 
 ```
 
+# 外部交互
+
+组件通过defineExpose暴露如下内容  
+
+```ts
+defineExpose({
+  model,  // 值
+  props,  // 参数
+  uploadRef,  // el-upload实例ref
+  dialogRef // 预览el-dialog实例ref
+});
+```
+
 # 运行实例

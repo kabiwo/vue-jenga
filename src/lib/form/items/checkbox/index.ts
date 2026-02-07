@@ -14,6 +14,8 @@ export type VjfCheckboxProps = VjFormItemBase & {
   button?: boolean; // 按钮模式
   options?: VjfCheckboxOption[] | ((item: VjfCheckboxProps, model: Record<string, unknown>) => VjfCheckboxOption[]);  // 选项
   // [Vue warn]: Invalid prop: type check failed for prop "options". Expected Function, got Array
+  allControl?: boolean; // 全选控制
+  allText?: string; // 全选文本
   elCheckboxProps?: ElPropsType<typeof ElCheckboxGroup> | ((item: VjfCheckboxProps, model: Record<string, unknown>) => ElPropsType<typeof ElCheckboxGroup>);  // ElCheckbox参数
   elCheckboxEmit?: ElEventType<typeof ElCheckboxGroup>; // ElCheckbox事件
   skOptionDefault?: string; // option的default参数

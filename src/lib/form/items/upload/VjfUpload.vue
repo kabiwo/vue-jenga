@@ -1,6 +1,6 @@
 <template>
   <div>
-    <el-upload :http-request="upload" :limit="props.limit" :disabled="props.disabled" :multiple="props.multiple"
+    <el-upload ref="uploadRef" :http-request="upload" :limit="props.limit" :disabled="props.disabled" :multiple="props.multiple"
       :file-list="fileList" :on-preview="preview" :on-success="onSuccess" :on-remove="onRemove" v-bind="props.elUploadProps" v-on="props.elUploadEmit || {}" >
       <template  #default>
         <component v-if="props.skDefault && slots[props.skDefault]" :is="VjSlotRender(slots[props.skDefault]!, { props, model })" />
@@ -18,7 +18,7 @@
         <component :is="VjSlotRender(slots[props.skFile]!, { props, model, scope })" />
       </template>
     </el-upload>
-    <el-dialog v-model="previewVisible">
+    <el-dialog ref="dialogRef" v-model="previewVisible">
       <img :src="previewFile!.url" :alt="previewFile!.name" class="vj-w-full" />
     </el-dialog>
   </div>
@@ -27,16 +27,21 @@
 import { type UploadRequestOptions, ElUpload, ElDialog, ElButton } from "element-plus";
 import { type VjfUploadModel, type VjfUploadPropsTotal } from ".";
 import type { UploadUserFile, UploadFile } from "element-plus";
-import { computed, onMounted, ref } from "vue";
+import { computed, onMounted, ref, useAttrs } from "vue";
 import { VjSlotRender, useVjConfStore } from "../../../utils";
 
 const conf = useVjConfStore();
 
 const model = defineModel<VjfUploadModel>();
-const props = defineProps<VjfUploadPropsTotal>();
+const p = defineProps<VjfUploadPropsTotal>();
+const attrs = useAttrs();
+const props = computed(() => {return Object.assign({}, p, attrs)});
+
+const uploadRef = ref<InstanceType<typeof ElUpload>>();
+const dialogRef = ref<InstanceType<typeof ElDialog>>();
 
 const slots = computed(() => {
-  return props.slots || {};
+  return props.value.slots || {};
 });
 
 const fileList = ref<UploadUserFile[]>([]);
@@ -44,7 +49,7 @@ const fileList = ref<UploadUserFile[]>([]);
 const upload: (
   options: UploadRequestOptions,
 ) => XMLHttpRequest | Promise<unknown> = async (options) => {
-  let func = props.uploadFunc || conf.getConf().uploadFunc;
+  let func = props.value.uploadFunc || conf.getConf().uploadFunc;
 
   if (func) {
     let res = await func(options);
@@ -60,7 +65,7 @@ const upload: (
 };
 
 const onChange = () => {
-  props.onChange && props.onChange(fileList.value, props, props.model!);
+  props.value.onChange && props.value.onChange(fileList.value, props.value, props.value.model!);
 };
 
 const onRemove = (file: UploadUserFile) => {
@@ -84,12 +89,19 @@ const onSuccess = (response: Record<string, unknown>, file: UploadFile) => {
 };
 
 onMounted(async () => {
-  if (props.initFunc) {
-    let res = await props.initFunc(props.model!, props);
+  if (props.value.initFunc) {
+    let res = await props.value.initFunc(props.value.model!, props.value);
     if (res.length > 0) {
       fileList.value = res;
       onChange();
     }
   }
+});
+
+defineExpose({
+  model,  // 值
+  props,  // 参数
+  uploadRef,  // el-upload实例ref
+  dialogRef // 预览el-dialog实例ref
 });
 </script>

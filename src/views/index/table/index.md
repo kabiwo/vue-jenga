@@ -4,7 +4,9 @@
 
 表格在具有高度限制（固定高度/弹性高度）的容器内可自适应铺满  
 
-提供类型VjTableProps、VjTableConfigItem、ElTableScope
+提供类型VjTableProps、VjTableConfigItem、ElTableScope  
+
+现在可以在VjConf中注册公用组件，通过配置的type来全局复用子组件
 
 # 使用方法
 
@@ -63,7 +65,7 @@ export type VjTableItemBase = {
   width?: string | number; // 宽度，全局rem开启后，数字单位会自动计算，1单位代表基准屏幕宽度下的10px
   minWidth?: string | number; // 最小宽度，同width，默认值是基准屏幕宽度下100px
   formatter?: ( // 格式化函数，对字段值做二次处理
-    scope: ElTableScope,
+    scope: ElTableScope & { _props: Record<string, unknown> },
     value: unknown,
   ) => unknown;
   ellipsis?: boolean; // 开启后超长会省略
@@ -90,12 +92,19 @@ export type VjTableItemMap = VjTableItemBase & { // 值映射单元格
   isArray?: boolean;  // 数组映射
 };
 
+export type VjTableItemReg = VjTableItemBase & { // 注册子组件单元格
+  type: string;
+  regProps?: Record<string, unknown>; // 子组件props
+  regEmit?: Record<string, Function>; // 子组件事件
+};
+
 export type VjTableItemChild =
   | VjTableItemBase
   | VjTableItemMap
   | VjTableItemExpand
   | VjTableItemSelect
-  | VjTableItemIndex;
+  | VjTableItemIndex
+  | VjTableItemReg;
 
 export type VjTableItemParent = Partial<Omit<VjTableItemBase, "prop">> & {
   children?: VjTableConfigItem[];

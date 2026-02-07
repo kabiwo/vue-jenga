@@ -1,12 +1,12 @@
 <template>
-  <markdown :mdStr/>
+  <markdown :mdStr />
 
   <div class="vj-h-50"> <!-- 有高度限制的外部容器 -->
     <vj-table :data="data" :total v-model:pIndex="pIndex" v-model:pSize="pSize" :cloumns v-bind="tableProps">
-      <template #expendTemplate="scope">  <!-- 提供给expend用的插槽 -->
+      <template #expendTemplate="scope"> <!-- 提供给expend用的插槽 -->
         <div>expend{{ getScope(scope) }}</div>
       </template>
-      <template #customTemplate="scope">  <!-- 提供给custom用的插槽 -->
+      <template #customTemplate="scope"> <!-- 提供给custom用的插槽 -->
         <div>custom{{ getScope(scope) }}</div>
       </template>
     </vj-table>
@@ -18,7 +18,7 @@
 import { onMounted, ref } from 'vue';
 import mdStr from './index.md?raw'
 import demo1 from './demo1.md?raw'
-import {list} from 'radash'
+import { list } from 'radash'
 
 import { type ElTableScope, type VjTableConfigItem, type VjTableProps } from 'vue-jenga/table'
 
@@ -69,7 +69,7 @@ const cloumns = ref<VjTableConfigItem[]>([  // 列定义
     label: 'map',
     type: 'map',  // map映射单元格
     prop: 'map',
-    map: {a: '1', b: '2', c: '3'},  // 映射字典
+    map: { a: '1', b: '2', c: '3' },  // 映射字典
     isArray: true,  // 开启数组映射，此时单元格内拥有vj-table-item-map-box样式类的元素会有为prop-${prop}的样式标记
     fixed: 'right', // 靠右固定
   },
@@ -78,6 +78,36 @@ const cloumns = ref<VjTableConfigItem[]>([  // 列定义
     prop: 'custom',
     skDefault: 'customTemplate',  // 通过default插槽开启自定义模式
     fixed: 'right',
+  },
+  {
+    label: '注册',
+    prop: 'table-reg1',
+    fixed: 'right',
+    type: 'table-reg1',
+    regProps: {
+      name: 'abc'
+    },
+    regEmit: {
+      call: (name: string) => {
+        alert(name);
+      }
+    }
+  },
+  {
+    label: '操作',
+    prop: 'table-fold-link',
+    fixed: 'right',
+    type: 'fold-link',
+    width: 30,
+    regProps: {
+      links: list(0, 20, i => {
+        return {
+          label: `link${i + 1}`,
+          func: () => alert(`link${i + 1}`)
+        };
+      }),
+      num: 3
+    }
   }
 ]);
 

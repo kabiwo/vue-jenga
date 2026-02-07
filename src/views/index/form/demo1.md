@@ -6,8 +6,16 @@
       <div>custom{{ consoleScope(scope) }}</div>
     </template>
   </VjForm>
+  <el-button type="primary" @click="trigger()">触发验证</el-button>
 ```
 ```ts
+  const formRef = ref<InstanceType<typeof VjForm>>();
+
+  const trigger = () => {
+    console.log(formRef, value1);
+    formRef.value?.validate();
+  };
+
   const commonOptions: VjOptions = [
     {
       label: 'option1',
@@ -19,9 +27,21 @@
     }
   ];
 
-  const consoleScope = (scope: unknown) => {
+  let customScope: VjFormItemScope;
+  const consoleScope = (scope: VjFormItemScope) => {
     console.log(scope)
-  }
+    customScope = scope;
+    customScope!._ItemProps!.addItemRule!('custom', {
+      code: 'custom',
+      rules: [
+        {
+          validator: () => {
+            return false;
+          }
+        }
+      ]
+    });
+  };
 
   const value1 = ref({});
   const form1 = ref<VjFormProps>({
@@ -165,6 +185,35 @@
         code: 'custom',
         type: 'custom',
         skDefault: 'custom'
+      },
+      {
+        label: '空',
+        code: 'empty',
+        type: 'empty'
+      },
+      {
+        label: 'repeat',
+        code: 'repeat',
+        type: 'repeat',
+        repeatItems: [
+          {
+            label: 'repeat',
+            code: 'repeat',
+            required: true
+          }
+        ],
+        repeatTime: 3
+      },
+      {
+        label: 'multi',
+        code: 'multi',
+        type: 'multi',
+        multiItemConf: {
+          label: 'multi-sub',
+          code: 'multi-sub',
+          required: true,
+          noLabel: true
+        }
       }
     ],
     col: 3

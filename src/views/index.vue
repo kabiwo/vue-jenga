@@ -6,10 +6,10 @@
     </el-header>
     <el-container class="vj-overflow-auto">
       <el-aside width="200px">
-        <VjMenu :menus :el-props="elProps"/>
+        <VjMenu :menus :el-props="elProps" />
       </el-aside>
       <el-main class="vj-overflow-auto">
-        <RouterView/>
+        <RouterView />
       </el-main>
     </el-container>
   </el-container>
@@ -28,7 +28,7 @@ const menus = ref<VjMenuItem[]>([
   {
     name: '概述',
     path: '/',
-  }, 
+  },
   {
     name: 'Form',
     path: '/form',
@@ -76,7 +76,11 @@ const menus = ref<VjMenuItem[]>([
       {
         name: 'Upload',
         path: '/form/upload'
-      }
+      },
+      {
+        name: 'Multi',
+        path: '/form/multi'
+      },
     ]
   },
   {
@@ -136,6 +140,16 @@ const menus = ref<VjMenuItem[]>([
       {
         name: 'Type',
         path: '/utils/type'
+      },
+    ]
+  },
+  {
+    name: 'Other',
+    path: '/other',
+    children: [
+      {
+        name: 'FoldLink',
+        path: '/other/fold-link'
       },
     ]
   }

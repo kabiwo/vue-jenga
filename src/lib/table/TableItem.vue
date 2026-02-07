@@ -2,7 +2,7 @@
   <template v-if="(props as VjTableItemParent).children">
     <el-table-column :label :width="width" :min-width="minWidth" :fixed="props.fixed" v-bind="props.elProps">
       <template v-if="props.skDefault && slots[props.skDefault]" #default="scope">
-        <component :is="VjSlotRender(slots[props.skDefault]!, scope)" />
+        <component :is="VjSlotRender(slots[props.skDefault]!, getScope(scope))" />
       </template>
       <template v-else #default>
         <TableItem v-for="(item, index) of (props as VjTableItemParent).children" :key="index" v-bind="item"
@@ -10,7 +10,7 @@
         </TableItem>
       </template>
       <template v-if="props.skHeader && slots[props.skHeader]" #header="scope">
-        <component :is="VjSlotRender(slots[props.skHeader]!, scope)" />
+        <component :is="VjSlotRender(slots[props.skHeader]!, getScope(scope))" />
       </template>
     </el-table-column>
   </template>
@@ -24,7 +24,7 @@
         :fixed="props.fixed" v-bind="props.elProps">
         <template #default="scope">
           <template v-if="props.skDefault && slots[props.skDefault]">
-            <component :is="VjSlotRender(slots[props.skDefault]!, scope)" />
+            <component :is="VjSlotRender(slots[props.skDefault]!, getScope(scope))" />
           </template>
         </template>
       </el-table-column>
@@ -34,7 +34,7 @@
         :fixed="props.fixed" v-bind="props.elProps">
         <template #default="scope">
           <template v-if="props.skDefault && slots[props.skDefault]">
-            <component :is="VjSlotRender(slots[props.skDefault]!, scope)" />
+            <component :is="VjSlotRender(slots[props.skDefault]!, getScope(scope))" />
           </template>
         </template>
       </el-table-column>
@@ -42,32 +42,39 @@
     <template v-else>
       <el-table-column :label :width="width" :min-width="minWidth" :prop="computedProp" :fixed="props.fixed"
         v-bind="props.elProps">
-        <template #default="scope" v-if="(props as any).type || props.skDefault">
-          <template v-if="(props as VjTableItemMap).type === 'map'">
-            <template v-if="(props as VjTableItemMap).isArray">
-              <div class="vj-table-item-map-box" :class="`prop-${computedProp}`">
-                <div class="vj-table-item-map" v-for="(item, index) in scope.row[computedProp!]" :key="index">
-                  {{ !!item ? (computedMap[item] || "") : "" }}
+        <template #default="scope">
+          <template v-if="(props as any).type || props.skDefault">
+            <template v-if="(props as VjTableItemMap).type === 'map'">
+              <template v-if="(props as VjTableItemMap).isArray">
+                <div class="vj-table-item-map-box" :class="`prop-${computedProp}`">
+                  <div class="vj-table-item-map" v-for="(item, index) in scope.row[computedProp!]" :key="index">
+                    {{ !!item ? (computedMap[item] || "") : "" }}
+                  </div>
                 </div>
+              </template>
+              <div class="vj-table-item-map"> {{
+                scope.row[computedProp!] !== undefined && scope.row[computedProp!] !== null ?
+                  (computedMap[scope.row[computedProp!]]
+                    || "") : ""
+              }}
               </div>
             </template>
-            <div class="vj-table-item-map"> {{
-              scope.row[computedProp!] !== undefined && scope.row[computedProp!] !== null ?
-                (computedMap[scope.row[computedProp!]]
-                  || "") : ""
-            }}
-            </div>
-          </template>
-          <template v-else>
-            <template v-if="props.skDefault && slots[props.skDefault]">
-              <component :is="VjSlotRender(slots[props.skDefault]!, scope)" />
+            <template v-else-if="(props as VjTableItemReg).type && conf.repoGet((props as VjTableItemReg).type)">
+              <component :is="conf.repoGet((props as VjTableItemReg).type)" v-bind="Object.assign({}, {
+                _scope: getScope(scope),
+              }, (props as VjTableItemReg).regProps || {})" v-on="(props as VjTableItemReg).regEmit || {}" />
+            </template>
+            <template v-else>
+              <template v-if="props.skDefault && slots[props.skDefault]">
+                <component :is="VjSlotRender(slots[props.skDefault]!, getScope(scope))" />
+              </template>
             </template>
           </template>
-        </template>
-        <template v-else #default="scope">
-          <div class="inline" :class="{ ' whitespace-nowrap text-ellipsis': props.ellipsis }" :title="getText(scope)">
-            {{ getText(scope) }}
-          </div>
+          <template v-else>
+            <div class="inline" :class="{ ' whitespace-nowrap text-ellipsis': props.ellipsis }" :title="getText(scope)">
+              {{ getText(scope) }}
+            </div>
+          </template>
         </template>
         <template #header="scope">
           <template v-if="props.skHeader && slots[props.skHeader]">
@@ -79,7 +86,7 @@
   </template>
 </template>
 <script setup lang="ts">
-import { computed } from "vue";
+import { computed, useAttrs } from "vue";
 import { ElTableColumn } from 'element-plus';
 import {
   type VjTableItemParent,
@@ -90,10 +97,13 @@ import {
   type VjTableItemExpand,
   type VjTableItemSelect,
   type ElTableScope,
+  type VjTableItemReg,
 } from "./";
 import { VjSlotRender, useVjConfStore } from "../utils";
 
 const props = defineProps<VjTableConfigItem>();
+
+const attrs = useAttrs();
 
 const conf = useVjConfStore();
 
@@ -148,8 +158,12 @@ const minWidth = computed(() => {
 const getText = (scope: ElTableScope): string => {
   let value = scope?.row[scope.column.property];
   if (props.formatter) {
-    return props.formatter(scope, value) as string;
+    return props.formatter(getScope(scope), value) as string;
   }
   return value || value === 0 || value === false ? (value as string) : "-";
+};
+
+const getScope = (scope: ElTableScope): ElTableScope & { _props: Record<string, unknown> } => {
+  return Object.assign({}, scope, { _props: Object.assign(props, attrs) });
 };
 </script>

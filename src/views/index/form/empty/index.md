@@ -11,3 +11,7 @@ export type VjfEmptyProps = VjFormItemBase & { // 空格
   type: "empty";
 };
 ```
+
+# 外部交互
+
+无

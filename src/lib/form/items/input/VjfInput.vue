@@ -1,6 +1,6 @@
 <template>
   <div>
-    <el-input v-model="model" :placeholder="props.placeholder" clearable @change="onChange" v-bind="props.elInputProps"
+    <el-input ref="inputRef" v-model="model" :placeholder="props.placeholder" clearable @change="onChange" v-bind="props.elInputProps"
       v-on="props.elInputEmit || {}" :disabled="props.disabled">
       <template v-if="props.skPrefix && slots[props.skPrefix]" #prefix>
         <component :is="VjSlotRender(slots[props.skPrefix]!, { model, props })" />
@@ -18,19 +18,30 @@
   </div>
 </template>
 <script lang="ts" setup>
-import { computed } from "vue";
+import { computed, ref, useAttrs } from "vue";
 import { ElInput } from 'element-plus';
 import type { VjfInputModel, VjfInputPropsTotal } from ".";
 import { VjSlotRender } from "../../../utils";
 
 const model = defineModel<VjfInputModel>();
-const props = defineProps<VjfInputPropsTotal>();
+const p = defineProps<VjfInputPropsTotal>();
+const attrs = useAttrs();
+const props = computed(() => {return Object.assign({}, p, attrs)});
+
+const inputRef = ref<InstanceType<typeof ElInput>>();
+
 
 const slots = computed(() => {
-  return props.slots || {};
+  return props.value.slots || {};
 });
 
 const onChange = (value?: unknown) => {
-  props.onChange && props.onChange(value, props, props.model!);
+  props.value.onChange && props.value.onChange(value, props.value, props.value.model!);
 };
+
+defineExpose({
+  model,  // 值
+  props,  // 参数
+  inputRef  // el实例ref
+});
 </script>

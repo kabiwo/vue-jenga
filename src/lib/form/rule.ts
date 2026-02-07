@@ -76,6 +76,26 @@ const checkNum = (
 
 const splitRules = (item: FormItemRule, code: string, labelMap: ComputedRef<Record<string, string>>, model: ModelRef<Record<string, unknown>, string, Record<string, unknown>>): FormItemRule[] => {
   if (item.message) { return [item]; }
+  if (item.validator) {
+    return [Object.assign({}, item, {
+      validator: (...args: Parameters<typeof item.validator>) => {
+        if (args[3]) {
+          args[3] = model;
+        }
+        return item.validator!(...args);
+      }
+    })];
+  }
+  if (item.asyncValidator) {
+    return [Object.assign({}, item, {
+      asyncValidator: (...args: Parameters<typeof item.asyncValidator>) => {
+        if (args[3]) {
+          args[3] = model;
+        }
+        return item.asyncValidator!(...args);
+      }
+    })];
+  }
   let arr: FormItemRule[] = [];
   const addRule = (key: string, getMsg?: () => string, patch?: { obj?: object; arr?: unknown[] }) => {
     let obj: FormItemRule = {

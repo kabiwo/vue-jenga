@@ -32,6 +32,23 @@ export type VjfCascaderProps = VjFormItemBase & {
 
 ```
 
+# 外部交互
+
+组件通过defineExpose暴露内容与类型如下：
+```ts
+const model: ModelRef<VjfCascaderModel, string, VjfCascaderModel, VjfCascaderModel>;
+const props: ComputedRef<Readonly<LooseRequired<VjfCascaderPropsTotal>> & {} & Data>;
+const cascaderRef = ref<InstanceType<typeof ElCascader>>();
+const cascaderPanelRef = ref<InstanceType<typeof ElCascaderPanel>>();
+
+defineExpose({
+  model,  // 绑定值
+  props,  // 参数
+  cascaderRef,  // el-cascader实例ref
+  cascaderPanelRef   // el-cascader-panel实例ref
+});
+```
+
 # 运行实例
 
 参看[VjForm实例1](/#/form/)中相关项

@@ -1,10 +1,11 @@
 <template>
   <markdown :mdStr />
-  <VjForm v-model="value1" v-bind="form1">
+  <VjForm ref="formRef" v-model="value1" v-bind="form1">
     <template #custom="scope">
       <div>custom{{ consoleScope(scope) }}</div>
     </template>
   </VjForm>
+  <el-button type="primary" @click="trigger()">触发验证</el-button>
   <markdown :mdStr="demo1" />
   <VjForm :form :col="5" :remerge />
   <markdown :mdStr="demo2" />
@@ -18,7 +19,15 @@ import mdStr from './index.md?raw'
 import demo1 from './demo1.md?raw'
 import demo2 from './demo2.md?raw'
 import { VjfcDateRange, VjfcDatetime, VjfcDatetimeRange, VjfcTextarea } from 'vue-jenga/form';
+import type { VjFormItemScope } from '../../../lib/form';
 // import axios from 'axios';
+
+const formRef = ref<InstanceType<typeof VjForm>>();
+
+const trigger = () => {
+  console.log(formRef, value1);
+  formRef.value?.validate();
+};
 
 
 // axios.get('/admin/dashboard/geturl?id=1')
@@ -40,9 +49,21 @@ const commonOptions: VjOptions = [
   }
 ];
 
-const consoleScope = (scope: unknown) => {
+let customScope: VjFormItemScope;
+const consoleScope = (scope: VjFormItemScope) => {
   console.log(scope)
-}
+  customScope = scope;
+  customScope!._ItemProps!.addItemRule!('custom', {
+    code: 'custom',
+    rules: [
+      {
+        validator: () => {
+          return false;
+        }
+      }
+    ]
+  });
+};
 
 const value1 = ref({});
 const form1 = ref<VjFormProps>({
@@ -186,6 +207,35 @@ const form1 = ref<VjFormProps>({
       code: 'custom',
       type: 'custom',
       skDefault: 'custom'
+    },
+    {
+      label: '空',
+      code: 'empty',
+      type: 'empty'
+    },
+    {
+      label: 'repeat',
+      code: 'repeat',
+      type: 'repeat',
+      repeatItems: [
+        {
+          label: 'repeat',
+          code: 'repeat',
+          required: true
+        }
+      ],
+      repeatTime: 3
+    },
+    {
+      label: 'multi',
+      code: 'multi',
+      type: 'multi',
+      multiItemConf: {
+        label: 'multi-sub',
+        code: 'multi-sub',
+        required: true,
+        noLabel: true
+      }
     }
   ],
   col: 3

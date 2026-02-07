@@ -1,7 +1,7 @@
 import 'virtual:uno.css' // vite build trigger css collect
 
 import VjForm from './VjForm.vue';
-import type { Slots } from 'vue';
+import type { ComponentPublicInstance, Ref, Slots } from 'vue';
 import type { ElForm, FormItemRule, FormRules } from 'element-plus';
 import type { ElPropsType } from '../utils';
 import type { VjfInputProps } from './items/input';
@@ -15,6 +15,7 @@ import type { VjfSwitchProps } from './items/switch';
 import type { VjfUploadProps } from './items/upload';
 import type { VjfCascaderProps } from './items/cascader';
 import type { VjfTreeSelectProps } from './items/treeselect';
+import type { VjfMultiProps } from './items/multi';
 export { VjForm };
 
 export * from './tool'
@@ -22,6 +23,8 @@ export * from './tool'
 export type ElFormInsType = InstanceType<typeof ElForm>;
 
 export type VjFormItemAttach = {  // 父组件向子组件注入的附加参数
+  index: number; // 在同一层级的序号
+  forms: VjFormItemProps[]; // 同一层级整个form的表单项配置
   labelMap: Record<string, string>; // 表单统一计算label字典传入表单项
   model: Record<string, unknown>; // 给子组件接收的回调函数传参
   rootModel: Record<string, unknown>; // 为split等多级表单场景统一收集model数据透传
@@ -31,6 +34,7 @@ export type VjFormItemAttach = {  // 父组件向子组件注入的附加参数
   rmSubForm: (key: string) => Record<string, ElFormInsType>; // 子组件注销子表单，用于校验
   slots?: Slots;  // 透传slots
   disabled?: boolean; // 传入disabled结果
+  parentProps: VjFormPropsTotal;
 };
 
 export type VjFormItemBase = { // 用户输入的基准参数
@@ -46,10 +50,13 @@ export type VjFormItemBase = { // 用户输入的基准参数
   hide?: boolean | ((item: VjFormItemProps, model: Record<string, unknown>) => boolean); // 隐藏
   onChange?: (value: unknown, item: VjFormItemProps, model: Record<string, unknown>) => void; // 值变化
 
+  noLabel?: boolean; // 隐藏label
+
   spanPre?: number; // 前缀尺寸
   skPre?: string; // 前缀插槽
   spanPost?: number;  // 后缀尺寸
   skPost?: string;  // 后缀插槽
+  skLabel?: string; // label插槽
 
   colspan?: number; // 跨列
   rowspan?: number; // 跨行
@@ -64,6 +71,7 @@ export type VjfEmptyProps = VjFormItemBase & { // 空格
 export type VjfRepeatProps = VjFormItemBase & { // 循环生成
   type: "repeat";
   repeatItems?: VjFormItemProps[] | ((props: VjfRepeatProps, model: Record<string, unknown>) => VjFormItemProps[]); // 循环项
+  repeatTime?: number; // 单项循环次数
 };
 
 export type VjfCustomProps = VjFormItemBase & { // 自定义
@@ -73,10 +81,17 @@ export type VjfCustomProps = VjFormItemBase & { // 自定义
   className?: string;  // 非插槽场景附加css样式类
 };
 
+export type VjFormItemReg = VjFormItemBase & { // 自注册
+  type: string;
+  regProps?: Record<string, unknown>;
+  regEmit?: Record<string, Function>;
+};
+
 export type VjFormItemProps = VjFormItemBase
   | VjfEmptyProps
   | VjfRepeatProps
   | VjfCustomProps
+  | VjFormItemReg
   | VjfInputProps
   | VjfNumberProps
   | VjfSelectProps
@@ -88,6 +103,7 @@ export type VjFormItemProps = VjFormItemBase
   | VjfUploadProps
   | VjfCascaderProps
   | VjfTreeSelectProps
+  | VjfMultiProps
 
 export type VjFormItemPropsTotal = VjFormItemProps & VjFormItemAttach;
 
@@ -106,3 +122,12 @@ export type VjFormProps = {
 
 export type VjFormPropsTotal = VjFormProps & VjFormPropsAttach;
 
+export type VjFormItemScopeAttach = {
+  _FormModel: Record<string, unknown>;
+  _ItemProps: Partial<VjFormItemPropsTotal> & Record<string, unknown>;
+  _code: string;
+  _index: number;
+  _forms: VjFormItemProps[];
+};
+
+export type VjFormItemScope = VjFormItemScopeAttach & Record<string, unknown>;

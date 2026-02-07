@@ -2,6 +2,8 @@
 
 vue-jenga的全局配置store，提供了配置类型与操作方法，涵盖了全局等比缩放相关计算属性  
 
+并且提供全局的组件注册，用于table/form等场景进行复用
+
 提供类型VjConf，基于pinia的useVjConfStore  
 
 等比缩放相关设计思路见下方段落说明  
@@ -48,6 +50,11 @@ export type VjConf = {
   baseFont: number; // 设计图根元素基准字号（默认40，单位px）
 };
 
+export type VjConfRegComp = {
+  type: string; // 全局唯一的key
+  comp?: Component; // 组件
+};
+
 // conf类型
 {
     setConf: (config: Partial<VjConf>) => void; // 写入配置
@@ -57,6 +64,10 @@ export type VjConf = {
     root10px: ComputedRef<number>;  // 当前页面尺寸下与设计比例相同的相当于设计尺寸10px的基准单位
     scaleRate: ComputedRef<number>; // 当前页面尺寸相对于设计尺寸的比例
     getScaledNum: (num: number) => number;  // 设计尺寸数值向当前页面尺寸进行换算
+    repo: Ref<Record<string, Component | undefined>, Record<string, Component | undefined>>; // 全局注册的组件缓存
+    repoReg: (tars: VjConfRegComp | VjConfRegComp[]) => void; // 注册组件
+    repoClear: () => void; // 清除所有已注册组件
+    repoGet: (type?: string) => Component | Record<string, Component | undefined> | undefined; // 获取特定type的组件或所有组件
 }
 ```
 
