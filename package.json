@@ -1,7 +1,7 @@
 {
   "name": "vue-jenga",
   "private": false,
-  "version": "0.1.8",
+  "version": "0.2.0",
   "description": "A series of tool for vue based on element-plus & pinia & axios.",
   "keywords": [
     "vue",
@@ -38,6 +38,10 @@
     "./utils": {
       "import": "./dist/utils.js",
       "types": "./dist/types/utils/index.d.ts"
+    },
+    "./other": {
+      "import": "./dist/other.js",
+      "types": "./dist/types/other/index.d.ts"
     },
     "./vue-jenga.css": "./dist/vue-jenga.css"
   },
