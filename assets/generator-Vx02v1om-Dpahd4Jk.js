@@ -1,0 +1,1 @@
+import{c as a}from"./string-CEni-xdW-C2QwjiYz.js";import{ag as c}from"./index-_HcIXaH9.js";const n=r=>{let t={};return Object.keys(r).forEach(e=>{t[a("on-"+e)]=r[e]}),t},f=(...r)=>{let t={};return r.forEach(e=>{Object.keys(e).forEach(o=>{t.hasOwnProperty(o)&&c(t[o])&&c(e[o])?t[o]=f(t[o],e[o]):t[o]=e[o]})}),t};export{n as O,f as m};
