@@ -96,6 +96,7 @@ import VjfUpload from "./items/upload/VjfUpload.vue";
 import VjfCascader from "./items/cascader/VjfCascader.vue";
 import VjfTreeselect from "./items/treeselect/VjfTreeselect.vue";
 import VjfMulti from "./items/multi/VjfMulti.vue";
+import { useVjConfStore } from "../utils";
 
 const conf = useVjConfStore();
 
