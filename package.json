@@ -46,7 +46,9 @@
     "./vue-jenga.css": "./dist/vue-jenga.css"
   },
   "files": [
-    "dist"
+    "dist",
+    "llms.txt",
+    "llms-full.txt"
   ],
   "types": "./dist/types",
   "dependencies": {

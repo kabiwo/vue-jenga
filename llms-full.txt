@@ -1,0 +1,1190 @@
+# Vue Jenga - 完整 API 文档
+
+> 本文档包含 Vue Jenga 组件库的完整类型定义和 API 说明，适用于 AI 助手深度理解组件用法。
+
+---
+
+## 目录
+
+1. [安装与初始化](#1-安装与初始化)
+2. [类型工具](#2-类型工具)
+3. [VjForm - 表单组件](#3-vjform---表单组件)
+4. [VjTable - 表格组件](#4-vjtable---表格组件)
+5. [VjModal - 弹窗组件](#5-vjmodal---弹窗组件)
+6. [VjMenu - 菜单组件](#6-vjmenu---菜单组件)
+7. [工具函数](#7-工具函数)
+
+---
+
+## 1. 安装与初始化
+
+### 安装
+
+```bash
+npm install vue-jenga
+# or
+pnpm add vue-jenga
+```
+
+### 依赖要求
+
+```json
+{
+  "vue": "^3.5.18",
+  "element-plus": "^2.10.5",
+  "pinia": "^3.0.3",
+  "axios": "^1.11.0"
+}
+```
+
+### 应用初始化
+
+```ts
+import { createApp } from 'vue'
+import { createPinia } from 'pinia'
+import { VjInit, useVjConfStore } from 'vue-jenga/utils'
+import App from './App.vue'
+
+const app = createApp(App)
+const pinia = createPinia()
+app.use(pinia)
+
+// 初始化 Vue Jenga
+VjInit({
+  remEnable: true,          // 开启 rem 适配
+  baseWidowWidth: 1920,     // 设计稿基准宽度
+  baseFont: 40,             // 基准字体大小
+  uploadFunc: async (options) => {
+    // 全局上传函数
+    return true
+  }
+})
+
+app.mount('#app')
+```
+
+---
+
+## 2. 类型工具
+
+### 基础类型工具 (from 'vue-jenga/utils')
+
+```ts
+// 获取 Element Plus 组件的 Props 类型
+type ElPropsType<T extends abstract new (...args: unknown[]) => any> = 
+  InstanceType<T>["$props"]
+
+// 获取 Element Plus 组件的 Events 类型
+type ElEventType<T extends abstract new (...args: unknown[]) => any> = 
+  Partial<Record<Parameters<InstanceType<T>["$emit"]>[0], (...args: unknown[]) => unknown>>
+
+// 获取 Element Plus 组件的 v-model 类型
+type ElModelType<T extends abstract new (...args: unknown[]) => any> = 
+  InstanceType<T>["$props"]["modelValue"]
+```
+
+### 选项类型
+
+```ts
+type VjOptionItem<T = unknown, K = unknown> = {
+  key?: string | number | symbol;
+  label: string;
+  value: T;
+  disabled?: boolean;
+  children?: VjOptionItem<T, K>[];
+  isLeaf?: boolean;
+  source?: K;
+  [property: string]: unknown;
+};
+
+type VjOptions<T = unknown, K = unknown> = VjOptionItem<T, K>[];
+```
+
+---
+
+## 3. VjForm - 表单组件
+
+### 基础类型定义
+
+```ts
+// 表单 Props
+interface VjFormProps {
+  col?: number;                                    // 列数，默认 1
+  form?: VjFormItemProps[];                        // 表单项配置数组
+  elFormProps?: ElPropsType<typeof ElForm>;       // ElForm 原生属性
+  slots?: Slots;                                   // 透传插槽
+  loading?: boolean;                               // 加载状态
+  remerge?: (item: VjFormItemProps, index: number) => Partial<VjFormItemProps>; // 渲染前二次处理
+}
+
+// 表单项基础类型（所有表单项都继承此类型）
+interface VjFormItemBase {
+  type?: string;                                   // 表单项类型
+  disableCheck?: boolean | ((props: VjFormItemProps, model: Record<string, unknown>) => boolean); // 禁用检查
+  defaultValue?: unknown | ((props: VjFormItemProps, model: Record<string, unknown>) => unknown); // 默认值
+  label?: string | ((item: VjFormItemProps) => string); // 标签
+  code: string;                                    // 唯一编码（必填）
+  required?: boolean;                              // 必填
+  placeholder?: string;                            // placeholder
+  noPlaceholder?: boolean;                         // 不显示 placeholder
+  rules?: FormItemRule | FormItemRule[];          // 校验规则
+  hide?: boolean | ((item: VjFormItemProps, model: Record<string, unknown>) => boolean); // 隐藏控制
+  onChange?: (value: unknown, item: VjFormItemProps, model: Record<string, unknown>) => void; // 值变化回调
+  
+  noLabel?: boolean;                               // 隐藏 label
+  
+  // 布局相关
+  spanPre?: number;                                // 前缀尺寸
+  skPre?: string;                                  // 前缀插槽 key
+  spanPost?: number;                               // 后缀尺寸
+  skPost?: string;                                 // 后缀插槽 key
+  skLabel?: string;                                // label 插槽 key
+  
+  colspan?: number;                                // 跨列
+  rowspan?: number;                                // 跨行
+  
+  [x: string]: unknown;                            // 允许额外属性
+}
+
+// 父组件向子组件注入的附加参数
+interface VjFormItemAttach {
+  index: number;                                   // 在同一层级的序号
+  forms: VjFormItemProps[];                        // 同一层级整个 form 的表单项配置
+  labelMap: Record<string, string>;                // code 到 label 的映射
+  model: Record<string, unknown>;                  // 当前表单数据
+  rootModel: Record<string, unknown>;              // 根级表单数据（用于多级表单）
+  addItemRule: (key: string, rule: VjFormItemProps) => FormRules; // 动态添加规则
+  rmItemRule: (key: string) => FormRules;          // 动态移除规则
+  addSubForm: (key: string, form: ElFormInsType) => Record<string, ElFormInsType>; // 添加子表单
+  rmSubForm: (key: string) => Record<string, ElFormInsType>; // 移除子表单
+  slots?: Slots;                                   // 透传插槽
+  disabled?: boolean;                              // 禁用状态
+  parentProps: VjFormPropsTotal;
+}
+
+// 表单作用域类型（用于插槽）
+interface VjFormItemScope {
+  _FormModel: Record<string, unknown>;             // 表单数据对象
+  _ItemProps: Partial<VjFormItemPropsTotal> & Record<string, unknown>; // 当前项完整配置
+  _code: string;                                   // 当前项 code
+  _index: number;                                  // 当前项索引
+  _forms: VjFormItemProps[];                       // 所有表单项配置
+}
+```
+
+### 组件 Expose
+
+```ts
+interface VjFormExpose {
+  forms: VjFormItemPropsTotal[];                   // 最终渲染的表单项列表
+  validate: () => Promise<boolean>;                // 触发表单校验
+  reset: () => void;                               // 重置表单值
+  formRef: InstanceType<typeof ElForm>;           // ElForm 实例引用
+  labelMap: Record<string, string>;                // code 到 label 的字典
+  
+  childRefs: VjFormItemExpose[];                   // 所有表单项实例
+  childRefMap: Record<string, VjFormItemExpose>;   // 表单项实例 Map
+  
+  ruleCollect: Record<string, FormRules>;          // 所有规则集合
+  addItemRule: (key: string, rule: VjFormItemProps) => FormRules;
+  rmItemRule: (key: string) => FormRules;
+}
+
+interface VjFormItemExpose {
+  formItemRef: InstanceType<typeof ElFormItem>;   // el-form-item 引用
+  typeItemRef: unknown;                            // 具体子组件引用
+  clearValidate: () => void;                       // 清除验证
+  mergedProps: VjFormItemPropsTotal;               // 合并后的 props
+}
+```
+
+---
+
+### 3.1 Input 输入框 (type: 'input')
+
+```ts
+interface VjfInputProps extends VjFormItemBase {
+  type: 'input';
+  elInputProps?: ElPropsType<typeof ElInput>;     // ElInput 参数
+  elInputEmit?: ElEventType<typeof ElInput>;      // ElInput 事件
+  skPrefix?: string;                               // prefix 插槽
+  skSuffix?: string;                               // suffix 插槽
+  skPrepend?: string;                              // prepend 插槽
+  skAppend?: string;                               // append 插槽
+}
+```
+
+**用法示例：**
+
+```ts
+{
+  label: '用户名',
+  code: 'username',
+  type: 'input',
+  required: true,
+  elInputProps: {
+    maxlength: 20,
+    showWordLimit: true,
+    clearable: true
+  }
+}
+```
+
+---
+
+### 3.2 Number 数字输入 (type: 'number')
+
+```ts
+interface VjfNumberProps extends VjFormItemBase {
+  type: 'number';
+  elNumberProps?: ElPropsType<typeof ElInputNumber>; // ElInputNumber 参数
+  elNumberEmit?: ElEventType<typeof ElInputNumber>;  // ElInputNumber 事件
+  skSuffix?: string;                                  // suffix 插槽
+  wfull?: boolean;                                    // 是否占满容器宽度
+}
+```
+
+**用法示例：**
+
+```ts
+{
+  label: '年龄',
+  code: 'age',
+  type: 'number',
+  elNumberProps: {
+    min: 0,
+    max: 150,
+    precision: 0,
+    step: 1
+  }
+}
+```
+
+---
+
+### 3.3 Select 选择器 (type: 'select')
+
+```ts
+interface VjfSelectProps extends VjFormItemBase {
+  type: 'select';
+  options?: VjOptions | ((item: VjfSelectPropsTotal, model: Record<string, unknown>) => VjOptions);
+  elSelectProps?: ElPropsType<typeof ElSelect> | ElPropsType<typeof ElSelectV2> | 
+    ((item: VjfSelectPropsTotal, model: Record<string, unknown>) => ElPropsType<typeof ElSelect> | ElPropsType<typeof ElSelectV2>);
+  elSelectEmit?: ElEventType<typeof ElSelect> | ElEventType<typeof ElSelectV2>;
+  virtual?: boolean;                                 // 列表虚拟滚动
+  
+  // 值预处理
+  onChangePrefix?: (options: VjOptions, value: unknown, item: VjfSelectPropsTotal, model: Record<string, unknown>) => unknown;
+  
+  // 远程搜索
+  remote?: boolean;                                  // 远程异步加载开关
+  remoteFunc?: (params: {query: string}, item: VjfSelectPropsTotal, model: Record<string, unknown>) => Promise<VjOptions>;
+  remoteInitQuery?: boolean;                         // 初始化加载开关
+  remoteInitOptions?: (item: VjfSelectPropsTotal, model?: Record<string, unknown>) => Promise<VjOptions>;
+  remoteParamAttach?: Record<string, unknown> | ((item: VjfSelectPropsTotal, model: Record<string, unknown>) => Record<string, unknown>);
+  
+  // 插槽
+  skDefault?: string;
+  skHeader?: string;
+  skFooter?: string;
+  skEmpty?: string;
+  skPrefix?: string;
+  skLoading?: string;
+  skTag?: string;
+  skLabel?: string;
+  skOptionDefault?: string;                          // option 的 default 插槽
+}
+```
+
+**用法示例：**
+
+```ts
+{
+  label: '城市',
+  code: 'city',
+  type: 'select',
+  options: [
+    { label: '北京', value: 'beijing' },
+    { label: '上海', value: 'shanghai' }
+  ],
+  // 远程搜索
+  remote: true,
+  remoteFunc: async ({ query }) => {
+    return await searchCities(query)
+  }
+}
+```
+
+---
+
+### 3.4 Date 日期选择 (type: 'date')
+
+```ts
+interface VjfDateProps extends VjFormItemBase {
+  type: 'date';
+  elDateProps?: ElPropsType<typeof ElDatePicker>;   // ElDatePicker 参数
+  elDateEmit?: ElEventType<typeof ElDatePicker>;    // ElDatePicker 事件
+}
+```
+
+**快捷函数：**
+
+```ts
+import { VjfcDateRange, VjfcDatetime, VjfcDatetimeRange } from 'vue-jenga/form'
+
+// 日期范围
+VjfcDateRange({
+  label: '日期范围',
+  code: 'dateRange'
+})
+
+// 日期时间
+VjfcDatetime({
+  label: '日期时间',
+  code: 'datetime'
+})
+
+// 日期时间范围
+VjfcDatetimeRange({
+  label: '日期时间范围',
+  code: 'datetimeRange'
+})
+```
+
+---
+
+### 3.5 Time 时间选择 (type: 'time')
+
+```ts
+interface VjfTimeProps extends VjFormItemBase {
+  type: 'time';
+  elTimeProps?: ElPropsType<typeof ElTimePicker>;   // ElTimePicker 参数
+  elTimeEmit?: ElEventType<typeof ElTimePicker>;    // ElTimePicker 事件
+}
+```
+
+---
+
+### 3.6 Radio 单选框 (type: 'radio')
+
+```ts
+interface VjfRadioOption extends VjOptionItem {
+  elRadioProps?: ElPropsType<typeof ElRadio>;       // ElRadio 参数
+  elRadioEmit?: ElEventType<typeof ElRadio>;        // ElRadio 事件
+}
+
+interface VjfRadioProps extends VjFormItemBase {
+  type: 'radio';
+  button?: boolean;                                  // 按钮模式
+  options?: VjfRadioOption[] | ((item: VjfRadioProps, model: Record<string, unknown>) => VjfRadioOption[]);
+  elRadioProps?: ElPropsType<typeof ElRadioGroup> | ((item: VjfRadioProps, model: Record<string, unknown>) => ElPropsType<typeof ElRadioGroup>);
+  elRadioEmit?: ElEventType<typeof ElRadioGroup>;
+  skOptionDefault?: string;                          // option 的 default 插槽
+}
+```
+
+**用法示例：**
+
+```ts
+{
+  label: '性别',
+  code: 'gender',
+  type: 'radio',
+  button: true,  // 按钮样式
+  options: [
+    { label: '男', value: 1 },
+    { label: '女', value: 2 }
+  ]
+}
+```
+
+---
+
+### 3.7 Checkbox 复选框 (type: 'checkbox')
+
+```ts
+interface VjfCheckboxOption extends VjOptionItem {
+  elCheckboxProps?: ElPropsType<typeof ElCheckbox>; // ElCheckbox 参数
+  elCheckboxEmit?: ElEventType<typeof ElCheckbox>;  // ElCheckbox 事件
+}
+
+interface VjfCheckboxProps extends VjFormItemBase {
+  type: 'checkbox';
+  button?: boolean;                                  // 按钮模式
+  options?: VjfCheckboxOption[] | ((item: VjfCheckboxProps, model: Record<string, unknown>) => VjfCheckboxOption[]);
+  allControl?: boolean;                              // 全选控制
+  allText?: string;                                  // 全选文本
+  elCheckboxProps?: ElPropsType<typeof ElCheckboxGroup> | ((item: VjfCheckboxProps, model: Record<string, unknown>) => ElPropsType<typeof ElCheckboxGroup>);
+  elCheckboxEmit?: ElEventType<typeof ElCheckboxGroup>;
+  skOptionDefault?: string;                          // option 的 default 插槽
+}
+```
+
+---
+
+### 3.8 Switch 开关 (type: 'switch')
+
+```ts
+interface VjfSwitchProps extends VjFormItemBase {
+  type: 'switch';
+  elSwitchProps?: ElPropsType<typeof ElSwitch>;     // ElSwitch 参数
+  elSwitchEmit?: ElEventType<typeof ElSwitch>;      // ElSwitch 事件
+  skActiveAction?: string;                           // active-action 插槽
+  skInactiveAction?: string;                         // inactive-action 插槽
+}
+```
+
+---
+
+### 3.9 Upload 文件上传 (type: 'upload')
+
+```ts
+interface VjfUploadProps extends VjFormItemBase {
+  type: 'upload';
+  elUploadProps?: ElPropsType<typeof ElUpload>;     // ElUpload 参数
+  elUploadEmit?: ElEventType<typeof ElUpload>;      // ElUpload 事件
+  initFunc?: (model: Record<string, unknown>, props: VjfUploadProps) => Promise<UploadUserFile[]>;  // 初始化文件列表
+  uploadFunc?: (options: UploadRequestOptions) => Promise<boolean>; // 上传函数
+  multiple?: boolean;                                // 多选
+  limit?: number;                                    // 数量限制
+  
+  // 插槽
+  skDefault?: string;
+  skTip?: string;
+  skTrigger?: string;
+  skFile?: string;
+}
+```
+
+**用法示例：**
+
+```ts
+{
+  label: '附件',
+  code: 'attachment',
+  type: 'upload',
+  multiple: true,
+  limit: 5,
+  uploadFunc: async (options) => {
+    const result = await uploadFile(options.file)
+    return result.success
+  }
+}
+```
+
+---
+
+### 3.10 Cascader 级联选择 (type: 'cascader')
+
+```ts
+type ElCascaderLazyLoad = (node: CascaderNode, resolve: Resolve) => void;
+
+interface VjfCascaderProps extends VjFormItemBase {
+  type: 'cascader';
+  options?: VjOptions<string | number>;              // 静态选项
+  props?: CascaderProps;                             // El 的 cascader 参数
+  lazyLoad?: ElCascaderLazyLoad;                     // 异步加载方法
+  lazyLoadFunc?: (item: VjfCascaderPropsTotal, model: Record<string, unknown>) => ElCascaderLazyLoad;
+  elCascaderProps?: ElPropsType<typeof ElCascader> | ElPropsType<typeof ElCascaderPanel>;
+  elCascaderEmit?: Record<string, (...args: unknown[]) => unknown>;
+  panel?: boolean;                                   // 非下拉模式
+  lazy?: boolean;                                    // 开启异步加载节点
+  
+  // 插槽
+  skDefault?: string;
+  skHeader?: string;
+  skFooter?: string;
+  skEmpty?: string;
+  skPrefix?: string;
+  skSuggestionItem?: string;
+  skTag?: string;
+}
+```
+
+---
+
+### 3.11 TreeSelect 树形选择 (type: 'treeselect')
+
+```ts
+interface VjfTreeSelectProps extends VjFormItemBase {
+  type: 'treeselect';
+  options?: VjOptions | ((item: VjfTreeSelectPropsTotal, model: Record<string, unknown>) => VjOptions);
+  elTreeSelectProps?: ElPropsType<typeof ElTreeSelect> | ((item: VjfTreeSelectPropsTotal, model: Record<string, unknown>) => ElPropsType<typeof ElTreeSelect>);
+  elTreeSelectEmit?: ElEventType<typeof ElTreeSelect>;
+  onChangePrefix?: (options: VjOptions, value: unknown, item: VjfTreeSelectPropsTotal, model: Record<string, unknown>) => unknown;
+  
+  // 远程搜索（同 select）
+  remote?: boolean;
+  remoteFunc?: (params: {query: string}, item: VjfTreeSelectPropsTotal, model: Record<string, unknown>) => Promise<VjOptions>;
+  remoteInitQuery?: boolean;
+  remoteInitOptions?: (item: VjfTreeSelectPropsTotal, model?: Record<string, unknown>) => Promise<VjOptions>;
+  remoteParamAttach?: Record<string, unknown> | ((item: VjfTreeSelectPropsTotal, model: Record<string, unknown>) => Record<string, unknown>);
+  
+  // 插槽
+  skDefault?: string;
+  skHeader?: string;
+  skFooter?: string;
+  skEmpty?: string;
+  skPrefix?: string;
+  skLoading?: string;
+  skTag?: string;
+  skLabel?: string;
+}
+```
+
+---
+
+### 3.12 Sub 子表单 (type: 'sub')
+
+```ts
+interface VjfSubProps extends VjFormItemBase {
+  type: 'sub';
+  subFormConf?: VjFormProps | ((props: VjfSubPropsTotal, model: VjfSubModel) => VjFormProps);
+}
+```
+
+**用法示例：**
+
+```ts
+{
+  label: '子表单',
+  code: 'subForm',
+  type: 'sub',
+  subFormConf: {
+    form: [
+      { label: '字段1', code: 'field1', required: true },
+      { label: '字段2', code: 'field2' }
+    ],
+    col: 2
+  }
+}
+```
+
+---
+
+### 3.13 Multi 动态多项 (type: 'multi')
+
+```ts
+interface VjfMultiProps extends VjFormItemBase {
+  type: 'multi';
+  multiItemConf: VjFormItemProps | ((props: VjfMultiPropsTotal, model: VjfMultiModel) => VjFormItemProps);
+  multiItemDefaultValue: () => unknown;              // 设置每个子项的默认值
+  onLengthChange?: (index: number, type: 'add' | 'del', scope: { props: VjfMultiPropsTotal; model: VjfMultiModel; }, attach?: unknown) => boolean;
+  multiSpan?: number;                                // 按钮占位
+}
+```
+
+**用法示例：**
+
+```ts
+{
+  label: '联系方式',
+  code: 'contacts',
+  type: 'multi',
+  multiItemConf: {
+    label: '电话',
+    code: 'phone',
+    required: true,
+    noLabel: true
+  },
+  multiItemDefaultValue: () => ({ phone: '' })
+}
+```
+
+---
+
+### 3.14 Custom 自定义 (type: 'custom')
+
+```ts
+interface VjfCustomProps extends VjFormItemBase {
+  type: 'custom';
+  skDefault?: string;                                // default 插槽
+  formatter?: (value: unknown, item: VjFormItemProps, model: Record<string, unknown>) => string; // 格式化函数
+  className?: string;                                // CSS 样式类
+}
+```
+
+**用法示例：**
+
+```html
+<VjForm v-model="formData" :form="formConfig">
+  <template #myCustom="scope">
+    <el-input v-model="scope._FormModel[scope._code]" />
+  </template>
+</VjForm>
+```
+
+```ts
+{
+  label: '自定义项',
+  code: 'customField',
+  type: 'custom',
+  skDefault: 'myCustom'
+}
+```
+
+---
+
+### 3.15 Empty 空占位 (type: 'empty')
+
+```ts
+interface VjfEmptyProps extends VjFormItemBase {
+  type: 'empty';
+}
+```
+
+用于布局占位，不渲染任何表单控件。
+
+---
+
+### 3.16 Repeat 循环生成 (type: 'repeat')
+
+```ts
+interface VjfRepeatProps extends VjFormItemBase {
+  type: 'repeat';
+  repeatItems?: VjFormItemProps[] | ((props: VjfRepeatProps, model: Record<string, unknown>) => VjFormItemProps[]);
+  repeatTime?: number;                               // 单项循环次数
+}
+```
+
+---
+
+## 4. VjTable - 表格组件
+
+### 基础类型定义
+
+```ts
+interface VjTableProps<T = unknown> {
+  data?: T[];                                        // 表格数据
+  total?: number;                                    // 数据总数
+  cloumns?: VjTableConfigItem[];                     // 列配置数组
+  
+  // 分页（双向绑定）
+  pIndex?: number;                                   // 当前页码
+  pSize?: number;                                    // 每页条数
+  
+  // ElTable 配置
+  elProps?: ElPropsType<typeof ElTable>;
+  elEmit?: ElEventType<typeof ElTable>;
+  
+  // 插槽
+  skDefault?: string;                                // default 插槽 key
+  skAppend?: string;                                 // append 插槽 key
+  skEmpty?: string;                                  // empty 插槽 key
+  slots?: Slots;
+  
+  // ElPagination 配置
+  elPagiProps?: ElPropsType<typeof ElPagination>;
+  elPagiEmit?: Partial<Record<keyof PaginationEmits, (...args: unknown[]) => unknown>>;
+  skPagiDefault?: string;                            // ElPagination 的 default 插槽 key
+}
+
+// 列基础类型
+interface VjTableItemBase {
+  prop?: string;                                     // 取值字段
+  label: string;                                     // 标题
+  elProps?: InstanceType<typeof ElTableColumn>["$props"]; // ElTableColumn 参数
+  
+  skDefault?: string;                                // default 插槽 key
+  skHeader?: string;                                 // header 插槽 key
+  slots?: Slots;
+  
+  pIndex?: number;
+  pSize?: number;
+  width?: string | number;                           // 宽度（rem 模式下数字单位为 10px）
+  minWidth?: string | number;                        // 最小宽度（默认 100px）
+  formatter?: (scope: ElTableScope & { _props: Record<string, unknown> }, value: unknown) => unknown;
+  ellipsis?: boolean;                                // 超长省略
+  fixed?: 'left' | 'right' | boolean;               // 固定列
+}
+
+// 作用域类型
+interface ElTableScope {
+  row: Record<string, unknown>;
+  column: TableColumnCtx;
+  $index: number;
+}
+```
+
+### 列类型
+
+```ts
+// 索引列
+type VjTableItemIndex = VjTableItemBase & {
+  type?: 'index';
+};
+
+// 复选列
+type VjTableItemSelect = VjTableItemBase & {
+  type?: 'select';
+};
+
+// 展开列
+type VjTableItemExpand = VjTableItemBase & {
+  type?: 'expand';
+};
+
+// 值映射列
+type VjTableItemMap = VjTableItemBase & {
+  type?: 'map';
+  map?: Record<string | number | symbol, string> | ((item: VjTableItemMap) => Record<string | number | symbol, string>);
+  isArray?: boolean;                                 // 数组映射
+};
+
+// 注册子组件列
+type VjTableItemReg = VjTableItemBase & {
+  type: string;                                      // 注册的子组件标识符
+  regProps?: Record<string, unknown>;               // 子组件 props
+  regEmit?: Record<string, Function>;               // 子组件事件
+};
+
+// 多级表头
+type VjTableItemParent = Partial<Omit<VjTableItemBase, 'prop'>> & {
+  children?: VjTableConfigItem[];
+};
+
+type VjTableConfigItem = VjTableItemParent | VjTableItemChild;
+```
+
+### 完整示例
+
+```ts
+import { VjTable, type VjTableConfigItem, type VjTableProps, type ElTableScope } from 'vue-jenga/table'
+
+const cloumns: VjTableConfigItem[] = [
+  { type: 'select', width: 10, fixed: true },                    // 复选列
+  { type: 'index', label: '序号', width: 10, fixed: true },      // 序号列
+  { 
+    type: 'expand', 
+    label: '展开', 
+    width: 10, 
+    skDefault: 'expandTemplate',                                 // 展开内容插槽
+    fixed: true 
+  },
+  { 
+    label: '名称', 
+    prop: 'name', 
+    width: 20,
+    formatter: (scope, value) => value?.toUpperCase()            // 格式化
+  },
+  { 
+    label: '状态', 
+    prop: 'status', 
+    type: 'map', 
+    map: { 0: '禁用', 1: '启用' },
+    width: 15
+  },
+  {
+    label: '操作',
+    prop: 'action',
+    skDefault: 'actionTemplate',                                  // 自定义操作列
+    fixed: 'right',
+    width: 20
+  }
+];
+
+const tableProps: VjTableProps = {
+  elPagiEmit: {
+    change: (page: number) => loadData(page)                      // 分页切换
+  }
+};
+```
+
+---
+
+## 5. VjModal - 弹窗组件
+
+### VjModal
+
+```ts
+interface VjModalProps {
+  title?: string;                                    // 标题
+  width?: number | string;                           // 宽度
+  cancelText?: string;                               // 取消按钮文本
+  confirmText?: string;                              // 确定按钮文本
+  confirmFunc?: (value?: unknown) => Promise<boolean>; // 确定点击函数（返回 true 关闭弹窗）
+  confirmCheckFunc?: (value?: unknown) => Promise<boolean>; // 确定前校验
+  showFunc?: (value: unknown) => Promise<boolean>;   // 弹窗展开后回调
+  noFooter?: boolean;                                // 不显示下方按钮
+  elDialogProps?: ElPropsType<typeof ElDialog>;     // ElDialog 参数
+  elDialogEmit?: ElEventType<typeof ElDialog>;      // ElDialog 事件
+  slots?: Slots;
+  skDefault?: string;                                // default 插槽
+  skHeader?: string;                                 // header 插槽
+}
+
+// Expose
+interface VjModalExpose {
+  dialog: InstanceType<typeof ElDialog>;
+  show: (value?: unknown) => void;                   // 显示弹窗
+  dialogShow: boolean;                               // 弹窗显示状态
+}
+```
+
+### VjModalForm
+
+```ts
+interface VjModalFormProps extends VjModalProps {
+  formProps?: VjFormProps;                           // VjForm 配置
+  skPre?: string;                                    // 表单前插槽
+  skPost?: string;                                   // 表单后插槽
+}
+```
+
+**用法示例：**
+
+```html
+<VjModalForm ref="modalRef" :formProps="formProps" />
+<el-button @click="modalRef?.show()">打开</el-button>
+```
+
+```ts
+import { VjModalForm, type VjModalFormProps, type VjFormProps } from 'vue-jenga/modal'
+
+const modalRef = ref<InstanceType<typeof VjModalForm>>();
+
+const formProps: VjFormProps = {
+  form: [
+    { label: '名称', code: 'name', required: true },
+    { label: '数量', code: 'count', type: 'number', required: true }
+  ],
+  col: 1
+};
+```
+
+---
+
+## 6. VjMenu - 菜单组件
+
+```ts
+interface VjMenuItem {
+  name: string;                                      // 菜单名
+  path: string;                                      // 路由路径
+  icon?: string;                                     // 图标
+  group?: boolean;                                   // 分组
+  elItemProps?: Partial<MenuItemProps>;             // ElMenuItem 参数
+  elItemEmits?: Partial<MenuItemEmits>;             // ElMenuItem 事件
+  elSubProps?: Partial<SubMenuProps>;               // ElSubMenu 参数
+  children?: VjMenuItem[] | null;
+}
+
+interface VjMenuProps {
+  elProps?: Partial<MenuProps>;                     // ElMenu 参数
+  elEmits?: Partial<MenuEmits>;                     // ElMenu 事件
+  menus: VjMenuItem[];                               // 菜单配置数组
+  iconFunc?: (item: VjMenuItem) => string;          // 图标处理函数
+}
+
+// Expose
+interface VjMenuExpose {
+  elMenuRef: InstanceType<typeof ElMenu>;
+}
+```
+
+**用法示例：**
+
+```html
+<VjMenu :menus="menuConfig" :el-props="{ router: true, defaultActive: '/home' }" />
+```
+
+```ts
+const menuConfig: VjMenuItem[] = [
+  { name: '首页', path: '/home', icon: 'HomeFilled' },
+  { 
+    name: '系统管理', 
+    path: '/system', 
+    icon: 'Setting',
+    children: [
+      { name: '用户管理', path: '/system/user' },
+      { name: '角色管理', path: '/system/role' }
+    ]
+  }
+];
+```
+
+---
+
+## 7. 工具函数
+
+### 7.1 请求工具
+
+```ts
+// 配置类型
+interface VjRequestConf {
+  interceptorRequest: (conf: InternalAxiosRequestConfig) => InternalAxiosRequestConfig;
+  interceptorRequestErr: (err: unknown) => unknown;
+  interceptorResponse: (res: AxiosResponse) => AxiosResponse;
+  interceptorResponseErr: (err: unknown) => unknown;
+  responseGlobalCheck: <T>(response: AxiosResponse<T>, options?: VjRequestOptions) => [true, T] | [false, unknown];
+  globalErrorHandle: <T = unknown>(err: unknown) => Promise<T>;
+}
+
+type VjRequestOptions = AxiosRequestConfig & Record<string, unknown>;
+```
+
+**API：**
+
+```ts
+import { 
+  VjRequestInit, 
+  VjRequestInstance, 
+  VjRequestSetConf, 
+  VjRequestGetConf,
+  VjGet, 
+  VjPost, 
+  VjPut, 
+  VjDel 
+} from 'vue-jenga/utils'
+
+// 初始化
+VjRequestInit({
+  interceptorRequest: (config) => {
+    config.headers.Authorization = `Bearer ${token}`
+    return config
+  },
+  responseGlobalCheck: (response) => {
+    if (response.data.code === 200) {
+      return [true, response.data.data]
+    }
+    return [false, response.data.message]
+  },
+  globalErrorHandle: async (err) => {
+    ElMessage.error(String(err))
+    return Promise.reject(err)
+  }
+})
+
+// 使用
+const users = await VjGet<User[]>('/api/users', { status: 1 })
+const user = await VjPost<User>('/api/users', { name: 'test' })
+const updated = await VjPut<User>('/api/users/1', { name: 'updated' })
+await VjDel('/api/users/1')
+```
+
+---
+
+### 7.2 确认框工具
+
+```ts
+import { VjConfirm } from 'vue-jenga/utils'
+
+const confirmed = await VjConfirm(
+  '确认删除?',                    // 标题
+  '删除后数据无法恢复',            // 消息内容（支持 string | VNode | (() => VNode)）
+  async () => {                   // 确认回调
+    await deleteItem()
+    return true                   // 返回 true 关闭弹窗
+  },
+  {                             // ElMessageBoxOptions 可选
+    confirmButtonText: '确认删除',
+    cancelButtonText: '取消',
+    type: 'warning'
+  }
+)
+```
+
+---
+
+### 7.3 文件工具
+
+```ts
+import { VjDownFile, VjBlobToUrl, VjBlobToStr } from 'vue-jenga/utils'
+
+// 下载文件
+VjDownFile(
+  blobData, 
+  '报表.xlsx', 
+  'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet'
+)
+
+// Blob 转 URL（图片预览等）
+const imageUrl = VjBlobToUrl(blobData, 'image/png')
+
+// Blob 转字符串
+const text = await VjBlobToStr(blobData, 'utf-8')
+```
+
+---
+
+### 7.4 全局配置 Store
+
+```ts
+import { useVjConfStore, type VjConf, type VjConfRegComp } from 'vue-jenga/utils'
+
+const conf = useVjConfStore()
+
+// 配置项
+interface VjConf {
+  remEnable: boolean;              // 是否开启 rem 适配
+  baseWidowWidth: number;          // 设计稿基准宽度
+  baseFont: number;                // 基准字体大小
+  uploadFunc?: (options: UploadRequestOptions) => Promise<boolean>; // 全局上传函数
+}
+
+// 注册全局组件（用于 VjForm/VjTable 的自定义 type）
+conf.repoReg([
+  { type: 'my-input', comp: MyInputComponent },
+  { type: 'my-table-cell', comp: MyTableCellComponent }
+])
+
+// 获取/清空注册组件
+const comp = conf.repoGet('my-input')     // 获取单个
+const allComps = conf.repoGet()            // 获取全部
+conf.repoClear()                           // 清空
+
+// rem 相关计算
+const rootFont = conf.rootFont            // 计算后的根字体大小
+const scaleRate = conf.scaleRate          // 缩放比例
+const scaledNum = conf.getScaledNum(100)  // 根据比例计算数值
+```
+
+---
+
+### 7.5 其他工具
+
+```ts
+import { 
+  VjObjDeepMerge,      // 对象深度合并
+  VjTreeEach,          // 树形遍历
+  VjFlatToTree,        // 扁平转树
+  VjTreeToFlat,        // 树转扁平
+  VjClone,             // 深拷贝
+  VjIsEmpty,           // 判断是否为空
+  VjSleep,             // 睡眠等待
+  VjUid,               // 生成唯一 ID
+  VjDebounce,          // 防抖
+  VjThrottle           // 节流
+} from 'vue-jenga/utils'
+```
+
+---
+
+## 8. 其他组件
+
+### VjFoldLink - 折叠链接
+
+用于表格操作列的链接折叠展示。
+
+```ts
+import { VjFoldLink, type VjFoldLinkItem, type VjFoldLinkProps } from 'vue-jenga/other'
+
+interface VjFoldLinkItem {
+  label: string;                                     // 链接名
+  func?: (scope: ElTableScope | undefined, item: VjFoldLinkItem) => void;
+  hide?: boolean | ((item: VjFoldLinkItem, scope?: ElTableScope) => boolean);
+  loading?: boolean;
+  elLinkProps?: ElPropsType<typeof ElLink>;
+}
+
+interface VjFoldLinkProps {
+  tableScope?: ElTableScope;
+  num?: number;                                      // 显示几个（包括"更多"）
+  links?: VjFoldLinkItem[];
+  slots?: Slots;
+  skDefault?: string;
+  skMore?: string;
+}
+```
+
+**在 VjTable 中使用：**
+
+```ts
+{
+  label: '操作',
+  prop: 'action',
+  type: 'fold-link',                                 // 注册在 VjConf 中的类型
+  width: 30,
+  regProps: {
+    links: [
+      { label: '编辑', func: (scope) => handleEdit(scope) },
+      { label: '删除', func: (scope) => handleDelete(scope) },
+      // ... 更多链接，超出 num 会折叠
+    ],
+    num: 3
+  }
+}
+```
+
+---
+
+## 附录：完整类型导入速查
+
+```ts
+// Form 相关
+import { 
+  VjForm, 
+  VjfcTextarea, VjfcDateRange, VjfcDatetime, VjfcDatetimeRange, VjfcSelectMulti,
+  type VjFormProps, 
+  type VjFormItemProps, 
+  type VjFormItemBase,
+  type VjFormItemAttach,
+  type VjFormItemScope,
+  type VjfInputProps,
+  type VjfNumberProps,
+  type VjfSelectProps,
+  type VjfDateProps,
+  type VjfTimeProps,
+  type VjfRadioProps,
+  type VjfCheckboxProps,
+  type VjfSwitchProps,
+  type VjfUploadProps,
+  type VjfCascaderProps,
+  type VjfTreeSelectProps,
+  type VjfSubProps,
+  type VjfMultiProps,
+  type VjfCustomProps,
+  type VjfEmptyProps,
+  type VjfRepeatProps
+} from 'vue-jenga/form'
+
+// Table 相关
+import { 
+  VjTable, 
+  type VjTableProps, 
+  type VjTableConfigItem, 
+  type VjTableItemBase,
+  type ElTableScope 
+} from 'vue-jenga/table'
+
+// Modal 相关
+import { 
+  VjModal, 
+  VjModalForm, 
+  type VjModalProps, 
+  type VjModalFormProps 
+} from 'vue-jenga/modal'
+
+// Menu 相关
+import { 
+  VjMenu, 
+  type VjMenuProps, 
+  type VjMenuItem 
+} from 'vue-jenga/menu'
+
+// 工具相关
+import { 
+  VjInit,
+  useVjConfStore,
+  VjRequestInit, VjGet, VjPost, VjPut, VjDel,
+  VjConfirm,
+  VjDownFile, VjBlobToUrl, VjBlobToStr,
+  type VjConf,
+  type VjRequestConf,
+  type ElPropsType,
+  type ElEventType,
+  type ElModelType,
+  type VjOptions,
+  type VjOptionItem
+} from 'vue-jenga/utils'
+
+// 其他组件
+import { 
+  VjFoldLink, 
+  type VjFoldLinkProps, 
+  type VjFoldLinkItem 
+} from 'vue-jenga/other'
+```
+
+---
+
+*本文档包含 Vue Jenga v0.2.2 的完整 API 定义*

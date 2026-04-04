@@ -1,0 +1,404 @@
+# Vue Jenga
+
+Vue Jenga 是一套基于 Vue 3 + Element Plus + Pinia + Axios 的前端组件库，提供表单、表格、弹窗、菜单等常用组件的二次封装。
+
+## 安装
+
+```bash
+npm install vue-jenga
+# or
+pnpm add vue-jenga
+```
+
+## 依赖
+
+- Vue ^3.5.18
+- Element Plus ^2.10.5
+- Pinia ^3.0.3
+- Axios ^1.11.0 (可选，用于请求工具)
+
+## 初始化
+
+```ts
+import { createApp } from 'vue'
+import { createPinia } from 'pinia'
+import { VjInit, useVjConfStore } from 'vue-jenga/utils'
+import App from './App.vue'
+
+const app = createApp(App)
+const pinia = createPinia()
+app.use(pinia)
+
+// 初始化 Vue Jenga 配置
+VjInit({
+  remEnable: true,      // 是否开启 rem 适配
+  baseWidowWidth: 1920, // 设计稿基准宽度
+  baseFont: 40,         // 基准字体大小
+})
+
+app.mount('#app')
+```
+
+## 核心组件
+
+### VjForm - 配置化表单组件
+
+基于 Element Plus ElForm 的二次封装，通过 JSON 配置动态渲染表单。
+
+**基础用法：**
+
+```html
+<VjForm v-model="formData" :form="formConfig" :col="3" />
+```
+
+```ts
+import { VjForm, type VjFormProps, type VjFormItemProps } from 'vue-jenga/form'
+
+const formData = ref({})
+const formConfig: VjFormItemProps[] = [
+  { label: '用户名', code: 'username', required: true },
+  { label: '年龄', code: 'age', type: 'number' },
+  { label: '性别', code: 'gender', type: 'select', options: [{label: '男', value: 1}, {label: '女', value: 2}] }
+]
+```
+
+**Props:**
+- `v-model` - 表单数据对象
+- `form` - 表单项配置数组 `VjFormItemProps[]`
+- `col` - 列数（默认 1）
+- `elFormProps` - Element Plus ElForm 的原生属性
+- `slots` - 透传插槽
+- `loading` - 加载状态
+- `remerge` - 渲染前对配置进行二次处理的函数
+
+**Expose:**
+- `forms` - 最终渲染的表单项列表
+- `validate()` - 触发表单校验
+- `reset()` - 重置表单值
+- `formRef` - ElForm 实例引用
+- `labelMap` - code 到 label 的映射字典
+
+**表单项类型：**
+- `input` - 文本输入（默认）
+- `number` - 数字输入
+- `select` - 选择器（支持虚拟滚动、远程搜索）
+- `date` - 日期选择
+- `time` - 时间选择
+- `radio` - 单选框
+- `checkbox` - 复选框
+- `switch` - 开关
+- `upload` - 文件上传
+- `cascader` - 级联选择
+- `treeselect` - 树形选择
+- `sub` - 子表单
+- `multi` - 动态增减多项
+- `custom` - 自定义插槽
+- `empty` - 空占位
+- `repeat` - 循环生成
+
+**快捷工具函数（from 'vue-jenga/form'）：**
+- `VjfcTextarea(conf)` - 文本域
+- `VjfcDateRange(conf)` - 日期范围
+- `VjfcDatetime(conf)` - 日期时间
+- `VjfcDatetimeRange(conf)` - 日期时间范围
+- `VjfcSelectMulti(conf)` - 多选下拉
+
+---
+
+### VjTable - 配置化表格组件
+
+基于 Element Plus ElTable + ElPagination 的二次封装。
+
+**基础用法：**
+
+```html
+<VjTable 
+  :data="tableData" 
+  :total="total" 
+  :cloumns="columnConfig"
+  v-model:pIndex="pageIndex"
+  v-model:pSize="pageSize"
+/>
+```
+
+```ts
+import { VjTable, type VjTableProps, type VjTableConfigItem } from 'vue-jenga/table'
+
+const tableData = ref([])
+const total = ref(0)
+const pageIndex = ref(1)
+const pageSize = ref(20)
+
+const columnConfig: VjTableConfigItem[] = [
+  { type: 'select', width: 10, fixed: true },           // 复选列
+  { type: 'index', label: '序号', width: 10 },          // 索引列
+  { type: 'expand', label: '展开', skDefault: 'expandSlot' }, // 展开列
+  { label: '名称', prop: 'name', width: 20 },
+  { label: '状态', prop: 'status', type: 'map', map: {0: '禁用', 1: '启用'} },
+  { label: '操作', prop: 'action', skDefault: 'actionSlot', fixed: 'right' }
+]
+```
+
+**Props:**
+- `data` - 表格数据数组
+- `total` - 数据总数（用于分页）
+- `cloumns` - 列配置数组 `VjTableConfigItem[]`
+- `pIndex` - 当前页码（v-model）
+- `pSize` - 每页条数（v-model）
+- `elProps` - ElTable 原生属性
+- `elEmit` - ElTable 事件
+- `elPagiProps` - ElPagination 原生属性
+- `elPagiEmit` - ElPagination 事件
+
+**列类型：**
+- `index` - 序号列
+- `select` - 复选列
+- `expand` - 展开列
+- `map` - 值映射列（通过 map 属性配置字典）
+- 自定义 type - 通过 VjConf 注册的全局组件
+
+---
+
+### VjModal / VjModalForm - 弹窗组件
+
+对 ElDialog 的二次封装，VjModalForm 内置表单功能。
+
+**基础用法：**
+
+```html
+<VjModal 
+  ref="modalRef"
+  title="提示"
+  :confirmFunc="handleConfirm"
+>
+  <p>弹窗内容</p>
+</VjModal>
+<el-button @click="modalRef.show()">打开</el-button>
+```
+
+```ts
+import { VjModal, VjModalForm, type VjModalProps } from 'vue-jenga/modal'
+
+const modalRef = ref<InstanceType<typeof VjModal>>()
+const handleConfirm = async () => {
+  // 返回 true 关闭弹窗，false 保持打开
+  return true
+}
+```
+
+**VjModal Props:**
+- `title` - 标题
+- `width` - 宽度
+- `cancelText` - 取消按钮文本
+- `confirmText` - 确定按钮文本
+- `confirmFunc` - 确定回调（返回 Promise<boolean>）
+- `confirmCheckFunc` - 确定前校验函数
+- `showFunc` - 弹窗显示后回调
+- `noFooter` - 隐藏底部按钮
+- `elDialogProps` - ElDialog 原生属性
+
+**VjModalForm Props:**
+继承 VjModalProps，额外支持：
+- `formProps` - VjFormProps 表单配置
+
+**Expose:**
+- `show(value?)` - 显示弹窗
+- `dialog` - ElDialog 实例
+- `dialogShow` - 弹窗显示状态
+
+---
+
+### VjMenu - 菜单组件
+
+对 ElMenu 的二次封装，通过配置数组渲染菜单。
+
+**基础用法：**
+
+```html
+<VjMenu :menus="menuConfig" :el-props="{ router: true }" />
+```
+
+```ts
+import { VjMenu, type VjMenuItem } from 'vue-jenga/menu'
+
+const menuConfig: VjMenuItem[] = [
+  { name: '首页', path: '/home', icon: 'Home' },
+  { 
+    name: '系统管理', 
+    path: '/system', 
+    icon: 'Setting',
+    children: [
+      { name: '用户管理', path: '/system/user' },
+      { name: '角色管理', path: '/system/role' }
+    ]
+  }
+]
+```
+
+**Props:**
+- `menus` - 菜单配置数组 `VjMenuItem[]`
+- `elProps` - ElMenu 原生属性
+- `elEmits` - ElMenu 事件
+- `iconFunc` - 自定义图标处理函数
+
+---
+
+## 工具函数
+
+### 请求工具 (from 'vue-jenga/utils')
+
+```ts
+import { VjRequestInit, VjGet, VjPost, VjPut, VjDel, type VjRequestConf } from 'vue-jenga/utils'
+
+// 初始化配置
+VjRequestInit({
+  interceptorRequest: (config) => {
+    config.headers.token = 'xxx'
+    return config
+  },
+  responseGlobalCheck: (response) => {
+    if (response.data.code === 200) {
+      return [true, response.data.data]
+    }
+    return [false, response.data.msg]
+  },
+  globalErrorHandle: (err) => {
+    // 统一错误处理
+    return Promise.reject(err)
+  }
+})
+
+// 使用
+const data = await VjGet<User[]>('/api/users')
+const user = await VjPost<User>('/api/users', { name: 'test' })
+```
+
+**API:**
+- `VjRequestInit(conf)` - 初始化请求配置
+- `VjRequestInstance` - Axios 实例
+- `VjGet<T>(url, data?, options?)`
+- `VjPost<T>(url, data?, options?)`
+- `VjPut<T>(url, data?, options?)`
+- `VjDel<T>(url, data?, options?)`
+
+---
+
+### 确认框工具
+
+```ts
+import { VjConfirm } from 'vue-jenga/utils'
+
+const confirmed = await VjConfirm(
+  '确认删除?', 
+  '删除后无法恢复',
+  async () => {
+    await deleteItem()
+    return true // 返回 true 关闭弹窗
+  }
+)
+```
+
+---
+
+### 文件工具
+
+```ts
+import { VjDownFile, VjBlobToUrl, VjBlobToStr } from 'vue-jenga/utils'
+
+// 下载文件
+VjDownFile(blobData, 'filename.xlsx', 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet')
+
+// Blob 转 URL（用于图片预览等）
+const url = VjBlobToUrl(blobData)
+
+// Blob 转字符串
+const text = await VjBlobToStr(blobData, 'utf-8')
+```
+
+---
+
+### 全局配置
+
+```ts
+import { useVjConfStore } from 'vue-jenga/utils'
+
+const conf = useVjConfStore()
+
+// 注册全局组件（用于 VjForm/VjTable 的自定义 type）
+conf.repoReg([
+  { type: 'my-custom', comp: MyCustomComponent },
+  { type: 'my-table-cell', comp: MyTableCellComponent }
+])
+
+// 获取 scaled 数值（开启 rem 适配时使用）
+const scaledNum = conf.getScaledNum(100) // 根据当前屏幕缩放比例计算
+
+// 获取配置
+const config = conf.getConf()
+```
+
+---
+
+## 类型速查
+
+### 通用类型工具
+
+```ts
+import type { ElPropsType, ElEventType, ElModelType, VjOptions } from 'vue-jenga/utils'
+
+// 获取 Element Plus 组件的 Props 类型
+type ElFormProps = ElPropsType<typeof ElForm>
+
+// 获取 Element Plus 组件的 Emit 类型
+type ElFormEvents = ElEventType<typeof ElForm>
+
+// 获取 Element Plus 组件的 v-model 类型
+type ElInputModel = ElModelType<typeof ElInput>
+
+// 选项类型
+const options: VjOptions = [
+  { label: '选项1', value: 1 },
+  { label: '选项2', value: 2, disabled: true }
+]
+```
+
+### 表单作用域类型
+
+```ts
+import type { VjFormItemScope } from 'vue-jenga/form'
+
+// 在自定义插槽中使用
+const handleCustom = (scope: VjFormItemScope) => {
+  scope._FormModel      // 表单数据对象
+  scope._ItemProps      // 当前表单项完整配置
+  scope._code           // 当前表单项 code
+  scope._index          // 当前表单项索引
+  scope._forms          // 所有表单项配置
+}
+```
+
+### 表格作用域类型
+
+```ts
+import type { ElTableScope } from 'vue-jenga/table'
+
+// formatter 函数中使用
+const formatter = (scope: ElTableScope & { _props: Record<string, unknown> }, value: unknown) => {
+  scope.row      // 当前行数据
+  scope.column   // 当前列配置
+  scope.$index   // 当前行索引
+  return formattedValue
+}
+```
+
+---
+
+## 更多资源
+
+- 文档站源码：`src/views/index/`
+- 组件源码：`src/lib/`
+- GitHub: (请填写你的仓库地址)
+
+---
+
+*本文档由 llms.txt 生成，用于 AI 助手快速理解 Vue Jenga 组件库的使用方式。*
