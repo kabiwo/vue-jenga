@@ -2,11 +2,11 @@
   <el-space class="vj-whitespace-nowrap">
     <component v-if="props.skDefault && slots[props.skDefault]"
             :is="VjSlotRender(slots[props.skDefault]!, Object.assign({links, normalList, moreList}))" />
-    <el-link type="primary" :underline="false" v-for="(item, index) in normalList" :key="index"
+    <el-link type="primary" underline="never" v-for="(item, index) in normalList" :key="index"
       @click="item.func && !item.loading && item.func(props.tableScope || props._scope as ElTableScope, item)" v-bind="item.elLinkProps || {}">{{
         item.label }}</el-link>
     <el-dropdown placement="bottom-start" v-if="moreList.length > 1">
-      <el-link type="primary" :underline="false" class="lh-2.3">更多<el-icon class="i-ep-arrow-down" /></el-link>
+      <el-link type="primary" underline="never" class="lh-2.3">更多<el-icon class="i-ep-arrow-down" /></el-link>
       <template #dropdown>
         <el-dropdown-menu v-if="props.skMore && slots[props.skMore]">
           <component :is="VjSlotRender(slots[props.skMore]!, Object.assign({links, normalList, moreList}))" />
@@ -15,7 +15,7 @@
           <el-dropdown-item v-for="(item, index) in moreList" :key="index" @click="
             item.func && !item.loading && item.func(props.tableScope || props._scope as ElTableScope, item)
             ">
-            <el-link type="primary" :underline="false" v-bind="item.elLinkProps || {}">{{ item.label }}</el-link>
+            <el-link type="primary" underline="never" v-bind="item.elLinkProps || {}">{{ item.label }}</el-link>
           </el-dropdown-item>
         </el-dropdown-menu>
       </template>
@@ -23,7 +23,7 @@
   </el-space>
 </template>
 <script setup lang="ts">
-import { ElSpace, ElDropdown, ElLink, ElDropdownMenu, ElDropdownItem } from 'element-plus';
+import { ElSpace, ElDropdown, ElLink, ElDropdownMenu, ElDropdownItem, ElIcon } from 'element-plus';
 import { computed, useAttrs, useSlots, type Slots } from "vue";
 import { type VjFoldLinkProps } from ".";
 import { assign, mapKeys } from "radash";

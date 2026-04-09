@@ -39,6 +39,6 @@ conf.repoReg({
 conf.repoReg({
   type: 'fold-link',
   comp: shallowRef(VjFoldLink)
-})
+});
 
 

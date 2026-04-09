@@ -19,9 +19,11 @@ import { computed, ref } from 'vue';
 import { type VjMenuItem, type VjMenuProps } from 'vue-jenga/menu'
 import { useRoute } from 'vue-router';
 
+const route = useRoute();
+
 const elProps = computed<VjMenuProps['elProps']>(() => ({
   router: true,
-  defaultActive: useRoute()?.path
+  defaultActive: route?.path
 }));
 
 const menus = ref<VjMenuItem[]>([
