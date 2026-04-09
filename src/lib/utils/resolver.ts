@@ -76,7 +76,7 @@ const utilsCollect = [
 ];
 
 const otherCollect: Record<string, string[]> = {
-  VjFoldLink: ['link', 'dropdown', 'dropdown-item', 'dropdown-menu', 'icon']
+  VjFoldLink: ['link', 'dropdown', 'dropdown-item', 'dropdown-menu', 'icon', 'space']
 };
 
 export interface ImportInfo {
