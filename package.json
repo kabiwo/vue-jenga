@@ -1,7 +1,7 @@
 {
   "name": "vue-jenga",
   "private": false,
-  "version": "0.2.3",
+  "version": "0.2.4",
   "description": "A series of tool for vue based on element-plus & pinia & axios.",
   "keywords": [
     "vue",
@@ -55,7 +55,7 @@
     "@shikijs/markdown-it": "^3.9.2",
     "@shikijs/twoslash": "^3.9.2",
     "@vueuse/core": "^13.6.0",
-    "element-plus": "^2.11.1",
+    "element-plus": "^2.13.6",
     "markdown-it-anchor": "^9.2.0",
     "markdown-it-async": "^2.2.0",
     "pinia": "^3.0.3",
@@ -63,7 +63,8 @@
     "radash": "^12.1.1",
     "shiki": "^3.9.2",
     "vue": "^3.5.18",
-    "vue-router": "^4.5.1"
+    "vue-router": "^4.5.1",
+    "vue-jenga": "link:."
   },
   "devDependencies": {
     "@iconify-json/ep": "^1.2.2",
