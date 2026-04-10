@@ -109,6 +109,10 @@ const p = defineProps<VjFormItemPropsTotal>();
 const attrs = useAttrs();
 const props = computed(() => { return Object.assign({}, p, attrs) });
 watch(props, () => {
+  let modelvalue = model.value;
+  if (props.value.model && props.value.model[props.value.code] !== modelvalue) {
+    modelvalue = props.value.model[props.value.code];
+  }
   if (model.value === undefined && props.value.defaultValue !== undefined) {
     let def;
     if (typeof props.value.defaultValue === "function") {
@@ -116,8 +120,11 @@ watch(props, () => {
     } else {
       def = props.value.defaultValue;
     }
+    modelvalue = def;
+  }
+  if (modelvalue !== model.value) {
     nextTick(() => {
-      model.value = def;
+      model.value = modelvalue;
     });
   }
 }, {

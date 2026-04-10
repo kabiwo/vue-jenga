@@ -72,6 +72,22 @@
         type: 'select',
         options: commonOptions
       },
+      {
+        label: '远程选择',
+        code: 'select-remote',
+        type: 'select',
+        remote: true,
+        remoteInitQuery: true,
+        remoteFunc: async (params, item, model) => {
+          console.log('search');
+          // nextTick(() => {
+            model['select-remote'] = 1;
+            // (value1.value as Record<string, unknown>)['select-remote'] = 1;
+          // });
+          return commonOptions
+        },
+        remoteInitOptions: async () => commonOptions,
+      },
       VjfcSelectMulti({
         label: '本地多选',
         code: 'multi-select-local',

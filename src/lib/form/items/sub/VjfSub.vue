@@ -33,8 +33,8 @@ const config = computed<VjFormProps>(() => {
 
 const pr = ref<VjFormProps["elFormProps"]>({
   inline: true,
-  hideRequiredAsterisk: true,
-  labelWidth: 0,
+  // hideRequiredAsterisk: true,
+  // labelWidth: 0,
 });
 
 onMounted(() => {
