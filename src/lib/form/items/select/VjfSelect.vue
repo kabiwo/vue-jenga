@@ -158,6 +158,7 @@ defineExpose({
   model,  // 值
   props,  // 参数
   selectV2Ref,  // el-select-v2实例的ref
-  selectRef // el-select实例的ref
+  selectRef, // el-select实例的ref
+  search  // 可以触发一次远程搜索 
 });
 </script>

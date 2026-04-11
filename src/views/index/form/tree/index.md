@@ -42,7 +42,8 @@ export type VjfTreeSelectProps = VjFormItemBase & {
 defineExpose({
   model,  // 值
   props,  // 参数
-  treeSelectRef // el-tree-select实例ref
+  treeSelectRef, // el-tree-select实例ref
+  search  // 可以触发一次远程搜索 
 });
 ```
 
