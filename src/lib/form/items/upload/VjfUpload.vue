@@ -5,7 +5,8 @@
       <template v-if="(props.skDefault && slots[props.skDefault]) || props.elUploadProps?.listType !== 'picture-card'" #default>
         <component v-if="props.skDefault && slots[props.skDefault]" :is="VjSlotRender(slots[props.skDefault]!, { props, model })" />
         <div v-else>
-          <el-button type="primary">点击上传</el-button>
+          <el-icon class="i-ep-plus" v-if="props.elUploadProps?.listType === 'picture-card'"></el-icon>
+          <el-button type="primary" v-else>点击上传</el-button>
         </div>
       </template>
       <template v-if="props.skTip && slots[props.skTip]" #tip>
