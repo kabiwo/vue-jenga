@@ -25,7 +25,7 @@
   </div>
 </template>
 <script setup lang="ts">
-import { type UploadRequestOptions, ElUpload, ElDialog, ElButton } from "element-plus";
+import { type UploadRequestOptions, ElUpload, ElDialog, ElButton, ElIcon } from "element-plus";
 import { type VjfUploadModel, type VjfUploadPropsTotal } from ".";
 import type { UploadUserFile, UploadFile } from "element-plus";
 import { computed, onMounted, ref, useAttrs } from "vue";

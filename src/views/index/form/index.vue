@@ -204,7 +204,7 @@ const form1 = ref<VjFormProps>({
     {
       label: '上传',
       code: 'upload',
-      type: 'upload'
+      type: 'upload',
     },
     {
       label: '级联',
