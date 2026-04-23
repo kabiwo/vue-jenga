@@ -2,7 +2,7 @@
   <div>
     <el-upload ref="uploadRef" :http-request="upload" :limit="props.limit" :disabled="props.disabled" :multiple="props.multiple"
       :file-list="fileList" :on-preview="preview" :on-success="onSuccess" :on-remove="onRemove" v-bind="props.elUploadProps" v-on="props.elUploadEmit || {}" >
-      <template v-if="(props.skDefault && slots[props.skDefault]) || props.elUploadProps?.listType !== 'picture-card'" #default>
+      <template #default>
         <component v-if="props.skDefault && slots[props.skDefault]" :is="VjSlotRender(slots[props.skDefault]!, { props, model })" />
         <div v-else>
           <el-icon class="i-ep-plus" v-if="props.elUploadProps?.listType === 'picture-card'"></el-icon>
