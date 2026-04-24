@@ -96,7 +96,11 @@ const cloumns = ref<VjTableConfigItem[]>([  // 列定义
       links: list(0, 20, i => {
         return {
           label: `link${i + 1}`,
-          func: () => alert(`link${i + 1}`)
+          func: () => alert(`link${i + 1}`),
+          hide: (item, scope) => {
+            console.log(item, scope);
+            return false;
+          } 
         };
       }),
       num: 3

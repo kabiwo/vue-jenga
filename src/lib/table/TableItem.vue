@@ -61,7 +61,7 @@
             </template>
             <template v-else-if="(props as VjTableItemReg).type && conf.repoGet((props as VjTableItemReg).type)">
               <component :is="conf.repoGet((props as VjTableItemReg).type)" v-bind="Object.assign({}, {
-                _scope: getScope(scope),
+                tableScope: getScope(scope),
               }, (props as VjTableItemReg).regProps || {})" v-on="(props as VjTableItemReg).regEmit || {}" />
             </template>
             <template v-else>

@@ -21,6 +21,7 @@ import demo1 from './demo1.md?raw'
 import { list } from 'radash'
 
 import { type ElTableScope, type VjTableConfigItem, type VjTableProps } from 'vue-jenga/table'
+import type { VjFoldLinkProps } from '../../../../dist/types/other';
 
 const data = ref<Record<string, unknown>[]>([]); // 列表数据
 const total = ref(0); // 总数
@@ -103,11 +104,15 @@ const cloumns = ref<VjTableConfigItem[]>([  // 列定义
       links: list(0, 20, i => {
         return {
           label: `link${i + 1}`,
-          func: () => alert(`link${i + 1}`)
+          func: () => alert(`link${i + 1}`),
+          hide: (item, scope) => {
+            console.log(item, scope);
+            return false;
+          } 
         };
       }),
       num: 3
-    }
+    } as VjFoldLinkProps
   }
 ]);
 
