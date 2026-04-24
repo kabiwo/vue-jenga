@@ -3,7 +3,7 @@
     <component v-if="props.skDefault && slots[props.skDefault]"
             :is="VjSlotRender(slots[props.skDefault]!, Object.assign({links, normalList, moreList}))" />
     <el-link type="primary" underline="never" v-for="(item, index) in normalList" :key="index"
-      @click="item.func && !item.loading && item.func(props.tableScope || props._scope as ElTableScope, item)" v-bind="item.elLinkProps || {}">{{
+      @click="item.func && !item.loading && item.func(props.tableScope || props._scope as ElTableScope, item)" v-bind="getProps(item) || {}">{{
         item.label }}</el-link>
     <el-dropdown placement="bottom-start" v-if="moreList.length > 1">
       <el-link type="primary" underline="never" class="lh-2.3">更多<el-icon class="i-ep-arrow-down" /></el-link>
@@ -15,7 +15,7 @@
           <el-dropdown-item v-for="(item, index) in moreList" :key="index" @click="
             item.func && !item.loading && item.func(props.tableScope || props._scope as ElTableScope, item)
             ">
-            <el-link type="primary" underline="never" v-bind="item.elLinkProps || {}">{{ item.label }}</el-link>
+            <el-link type="primary" underline="never" v-bind="getProps(item) || {}">{{ item.label }}</el-link>
           </el-dropdown-item>
         </el-dropdown-menu>
       </template>
@@ -25,9 +25,9 @@
 <script setup lang="ts">
 import { ElSpace, ElDropdown, ElLink, ElDropdownMenu, ElDropdownItem, ElIcon } from 'element-plus';
 import { computed, useAttrs, useSlots, type Slots } from "vue";
-import { type VjFoldLinkProps } from ".";
+import { type VjFoldLinkItem, type VjFoldLinkProps } from ".";
 import { assign, mapKeys } from "radash";
-import { VjSlotRender } from "../../utils";
+import { VjSlotRender, type ElPropsType } from "../../utils";
 import type { ElTableScope } from '../../table';
 
 const p = defineProps<VjFoldLinkProps>();
@@ -68,6 +68,15 @@ const moreList = computed(() => {
   }
   return [];
 });
+
+const getProps = (item: VjFoldLinkItem): ElPropsType<typeof ElLink> => {
+  let elProps = item.elLinkProps;
+  if (elProps && typeof elProps === 'function') {
+    return elProps(item, p.tableScope);
+  } else {
+    return elProps || {};
+  }
+};
 
 defineExpose({
   links,

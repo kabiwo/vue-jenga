@@ -11,7 +11,7 @@ export type VjFoldLinkItem = {
   func?: (scope: ElTableScope | undefined, item: VjFoldLinkItem) => void; // 点击函数
   hide?: boolean | ((item: VjFoldLinkItem, scope?: ElTableScope) => boolean); // 是否隐藏
   loading?: boolean;  // loading状态，阻塞点击函数
-  elLinkProps?: ElPropsType<typeof ElLink>; // ElLink类型
+  elLinkProps?: ElPropsType<typeof ElLink> | ((item: VjFoldLinkItem, scope?: ElTableScope) => ElPropsType<typeof ElLink>); // ElLink类型
 };
 
 export type VjFoldLinkProps = {
